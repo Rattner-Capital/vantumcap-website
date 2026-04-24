@@ -50,13 +50,13 @@ export default function Home() {
 
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-5 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-7 md:px-14 md:pt-9">
           <header className="relative flex items-center justify-between gap-4">
-            <div className="relative h-[74px] w-[240px] sm:h-[86px] sm:w-[300px]">
+            <div className="relative h-[74px] w-[240px] overflow-hidden sm:h-[86px] sm:w-[300px]">
               <Image
                 src="/vantum-logo.png"
                 alt="Vantum Capital"
                 fill
                 priority
-                className="object-contain object-left"
+                className="origin-left scale-[2.35] object-contain object-left"
               />
             </div>
 
