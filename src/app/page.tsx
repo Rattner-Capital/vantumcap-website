@@ -30,7 +30,7 @@ export default function Home() {
     <main className="bg-vantum-ink text-white">
       <section className="relative min-h-screen overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-[center_32%]"
+          className="absolute inset-0 bg-[100%_auto] bg-[center_32%] bg-no-repeat"
           style={{ backgroundImage: "url('/hero-clean.jpg')" }}
         />
 
@@ -40,10 +40,10 @@ export default function Home() {
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-5 pb-8 pt-2 sm:px-8 sm:pb-10 sm:pt-3 md:px-14 md:pt-4">
           <SiteHeader overlay />
 
-          <section className="relative z-0 shrink-0 pt-16 sm:pt-20 lg:pt-24 pb-8 sm:pb-10 lg:pb-12">
+          <section className="relative z-0 shrink-0 pt-28 sm:pt-32 lg:pt-36 pb-8 sm:pb-10 lg:pb-12">
             <div className="max-w-2xl">
               <h1 className="font-serif text-4xl leading-[0.98] text-slate-100 sm:text-5xl md:text-6xl lg:text-[74px]">
-                Turning Situational Complexity
+                Turning Complexity
                 <br />
                 Into Outcomes
                 <span className="text-vantum-gold">.</span>
