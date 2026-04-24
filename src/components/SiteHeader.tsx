@@ -123,7 +123,7 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
 
           <Link
             href="/"
-            className={`absolute left-0 top-0 z-50 block ${overlayHeroLiftClass}`}
+            className={`absolute left-[-60px] top-[30px] z-50 block ${overlayHeroLiftClass}`}
           >
             <div className={heroLogoFrameClass}>
               <Image
