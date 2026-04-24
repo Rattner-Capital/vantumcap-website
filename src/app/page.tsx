@@ -30,20 +30,20 @@ export default function Home() {
     <main className="bg-vantum-ink text-white">
       <section className="relative min-h-screen overflow-hidden">
         <div
-          className="absolute inset-0 bg-[100%_auto] bg-[center_32%] bg-no-repeat"
+          className="absolute inset-0 bg-no-repeat max-sm:bg-cover max-sm:bg-[center_32%] sm:bg-[100%_auto] sm:bg-[center_32%]"
           style={{ backgroundImage: "url('/hero-clean.jpg')" }}
         />
 
         <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-black/10 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
 
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col pb-8 pt-2 sm:pb-10 sm:pt-3 md:pt-4">
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col pb-8 pt-0 sm:pb-10 sm:pt-2 md:pt-4">
           <div className="shrink-0 px-5 sm:px-8 md:px-14">
             <SiteHeader overlay />
           </div>
 
           <div className="flex min-h-0 flex-1 flex-col pl-4 pr-5 sm:pl-6 sm:pr-8 md:pl-10 md:pr-14">
-            <section className="relative z-0 shrink-0 pb-8 pt-32 sm:pb-10 sm:pt-36 lg:pb-12 lg:pt-40">
+            <section className="relative z-0 shrink-0 pb-8 pt-6 sm:pb-10 sm:pt-36 lg:pb-12 lg:pt-40">
               <div className="max-w-2xl">
                 <h1 className="font-serif text-4xl leading-[0.98] text-slate-100 sm:text-5xl md:text-6xl lg:text-[74px]">
                   Turning Complexity
