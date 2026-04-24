@@ -110,7 +110,7 @@ export default function Home() {
 
           <section className="flex flex-1 items-center pb-28 pt-16 sm:pt-24 lg:pb-36 lg:pt-28">
             <div className="max-w-2xl">
-              <h1 className="font-serif text-5xl leading-[0.95] text-slate-100 sm:text-6xl md:text-7xl lg:text-[86px]">
+              <h1 className="font-serif text-4xl leading-[0.98] text-slate-100 sm:text-5xl md:text-6xl lg:text-[74px]">
                 Turning Situational Complexity
                 <br />
                 Into Outcomes
