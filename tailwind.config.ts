@@ -17,7 +17,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ["Georgia", "Times New Roman", "Times", "serif"],
+        serif: ["New York", "Georgia", "Times New Roman", "Times", "serif"],
         sans: ["Inter", "Segoe UI", "Helvetica Neue", "Arial", "sans-serif"],
       },
       boxShadow: {

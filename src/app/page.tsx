@@ -7,7 +7,6 @@ const navItems = [
   { label: "About Us", href: "#about" },
   { label: "Investment Strategy", href: "#strategy" },
   { label: "Our Team", href: "#team" },
-  { label: "Insights", href: "#insights" },
   { label: "Contact", href: "#contact" },
 ];
 
