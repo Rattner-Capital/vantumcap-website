@@ -6,29 +6,29 @@ import Image from "next/image";
 const navItems = [
   { label: "About Us", href: "#about" },
   { label: "Investment Strategy", href: "#strategy" },
-  { label: "Our Team", href: "#team" },
+  { label: "Our Team", href: "/team" },
   { label: "Contact", href: "#contact" },
 ];
 
 const features = [
   {
-    title: "Disciplined Approach",
-    body: "Rigorous research and a disciplined investment process.",
+    title: "Distressed & Special Situations",
+    body: "Dislocated opportunities driven by complexity and execution.",
     icon: "◫",
   },
   {
-    title: "Risk Management",
-    body: "Protecting capital while seeking attractive returns.",
+    title: "Underperforming Credit",
+    body: "Mispriced credit with downside protection focus.",
     icon: "◇",
   },
   {
-    title: "Aligned Interests",
-    body: "We invest alongside our partners and clients.",
+    title: "Buyout Vehicles",
+    body: "Control investments driving operational value creation.",
     icon: "◌",
   },
   {
-    title: "Long-Term Perspective",
-    body: "Building lasting value through patience and conviction.",
+    title: "Asset Turnarounds",
+    body: "Repositioning assets through hands-on execution.",
     icon: "◎",
   },
 ];
@@ -49,7 +49,7 @@ export default function Home() {
 
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-5 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-7 md:px-14 md:pt-9">
           <header className="relative flex items-center justify-between gap-4">
-            <div className="relative h-[74px] w-[240px] overflow-hidden sm:h-[86px] sm:w-[300px]">
+            <div className="relative -ml-5 h-[108px] w-[360px] overflow-hidden sm:-ml-6 sm:h-[124px] sm:w-[420px] lg:h-[148px] lg:w-[480px]">
               <Image
                 src="/vantum-logo.png"
                 alt="Vantum Capital"
@@ -124,13 +124,13 @@ export default function Home() {
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
-                  href="#strategy"
+                  href="/strategy"
                   className="rounded-sm bg-vantum-gold px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-vantum-ink transition hover:bg-vantum-lightGold"
                 >
                   Our Strategy
                 </a>
                 <a
-                  href="#about"
+                  href="/about"
                   className="rounded-sm border border-vantum-gold/70 bg-black/20 px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-vantum-lightGold transition hover:bg-vantum-gold/15"
                 >
                   About Vantum
@@ -164,74 +164,143 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="about" className="border-t border-white/10 bg-[#0b1321]">
-        <div className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-10">
-          <h3 className="font-serif text-4xl text-slate-100">About Us</h3>
-          <p className="mt-5 max-w-3xl text-slate-300">
-            Vantum Capital is an independent investment firm focused on
-            protecting capital and compounding value through cycles. We pursue
-            opportunities where disciplined underwriting and thoughtful
-            structuring can create durable outcomes.
-          </p>
+      <section id="about" className="border-t border-white/15 bg-[#06173B]">
+        <div className="mx-auto max-w-[1240px] px-6 py-28 sm:px-10 md:py-36">
+          <div className="grid items-start gap-14 lg:grid-cols-12">
+            <div className="lg:col-span-3">
+              <p className="text-xs text-slate-400">01</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.22em] text-vantum-lightGold">
+                About Vantum
+              </p>
+            </div>
+            <div className="lg:col-span-9">
+              <h2 className="max-w-4xl font-serif text-4xl leading-[1.08] text-white sm:text-5xl md:text-6xl">
+                Independent capital for complex and dislocated opportunities.
+              </h2>
+              <div className="mt-10 max-w-3xl space-y-6 text-base leading-relaxed text-slate-200 sm:text-lg">
+                <p>
+                  Vantum Capital is a multi-strategy investment firm focused on
+                  situations shaped by operational and capital structure
+                  complexity.
+                </p>
+                <p>
+                  We pair deep research, rigorous underwriting, and hands-on
+                  execution to pursue differentiated outcomes with disciplined
+                  risk management.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section id="strategy" className="border-t border-white/10 bg-[#0a111d]">
-        <div className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-10">
-          <h3 className="font-serif text-4xl text-slate-100">
-            Investment Strategy
-          </h3>
-          <p className="mt-5 max-w-3xl text-slate-300">
-            Our strategy is built around selective positioning, downside-aware
-            risk controls, and a repeatable research process. We focus on
-            asymmetric opportunities with clear catalysts and disciplined exit
-            frameworks.
-          </p>
+      <section className="border-t border-white/15 bg-[#06173B]">
+        <div className="mx-auto max-w-[1240px] px-6 py-28 sm:px-10 md:py-36">
+          <div className="grid items-start gap-14 lg:grid-cols-12">
+            <div className="lg:col-span-3">
+              <p className="text-xs text-slate-400">02</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.22em] text-vantum-lightGold">
+                Investment Philosophy
+              </p>
+            </div>
+            <div className="lg:col-span-9">
+              <h2 className="max-w-4xl font-serif text-4xl leading-[1.08] text-white sm:text-5xl md:text-6xl">
+                Credit-intensive, research-driven, and execution-focused.
+              </h2>
+              <div className="mt-10 grid gap-8 border-t border-white/15 pt-8 sm:grid-cols-3">
+                <div>
+                  <h3 className="font-serif text-2xl text-white">Downside First</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-200">
+                    Structure and sizing decisions prioritize capital
+                    preservation through cycles.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-serif text-2xl text-white">
+                    Selective Conviction
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-200">
+                    We concentrate in opportunities where complexity creates
+                    durable mispricing.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-serif text-2xl text-white">
+                    Active Execution
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-200">
+                    Hands-on engagement supports value realization and risk
+                    control.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section id="team" className="border-t border-white/10 bg-[#0b1321]">
-        <div className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-10">
-          <h3 className="font-serif text-4xl text-slate-100">Our Team</h3>
-          <p className="mt-5 max-w-3xl text-slate-300">
-            The firm combines institutional investment experience with a
-            partnership mindset. We prioritize alignment, transparency, and a
-            high-conviction process grounded in deep fundamental work.
-          </p>
+      <section id="strategy" className="border-t border-white/15 bg-[#06173B]">
+        <div className="mx-auto max-w-[1240px] px-6 py-28 sm:px-10 md:py-36">
+          <div className="grid items-start gap-14 lg:grid-cols-12">
+            <div className="lg:col-span-3">
+              <p className="text-xs text-slate-400">03</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.22em] text-vantum-lightGold">
+                Strategy / Areas of Focus
+              </p>
+            </div>
+            <div className="lg:col-span-9">
+              <h2 className="max-w-4xl font-serif text-4xl leading-[1.08] text-white sm:text-5xl md:text-6xl">
+                Dynamic allocation across a focused strategy set.
+              </h2>
+              <div className="mt-10 grid gap-0 border-y border-white/15">
+                {features.map((feature) => (
+                  <article
+                    key={`strategy-${feature.title}`}
+                    className="grid gap-5 border-b border-white/15 py-8 last:border-b-0 sm:grid-cols-12 sm:gap-8"
+                  >
+                    <div className="sm:col-span-5">
+                      <h3 className="font-serif text-3xl leading-tight text-white">
+                        {feature.title}
+                      </h3>
+                    </div>
+                    <div className="sm:col-span-7">
+                      <p className="max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">
+                        {feature.body}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section id="insights" className="border-t border-white/10 bg-[#0a111d]">
-        <div className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-10">
-          <h3 className="font-serif text-4xl text-slate-100">Insights</h3>
-          <p className="mt-5 max-w-3xl text-slate-300">
-            We publish periodic market commentary and portfolio perspectives
-            designed to communicate our thinking and provide context for
-            portfolio positioning.
-          </p>
-        </div>
-      </section>
-
-      <section id="contact" className="border-y border-white/10 bg-[#0b1321]">
-        <div className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-10">
-          <h3 className="font-serif text-4xl text-slate-100">Contact</h3>
-          <p className="mt-5 max-w-3xl text-slate-300">
-            For investor and partnership inquiries, please contact the Vantum
-            Capital team at{" "}
-            <a
-              href="mailto:info@vantumcap.com"
-              className="text-vantum-lightGold underline underline-offset-4"
-            >
-              info@vantumcap.com
-            </a>
-            .
-          </p>
-          <a
-            href="mailto:info@vantumcap.com"
-            className="mt-8 inline-block rounded-sm border border-vantum-gold/70 px-6 py-3 text-sm uppercase tracking-[0.14em] text-vantum-lightGold transition hover:bg-vantum-gold/15"
-          >
-            Send an inquiry
-          </a>
+      <section id="contact" className="border-y border-white/15 bg-[#06173B]">
+        <div className="mx-auto max-w-[1240px] px-6 py-28 sm:px-10 md:py-36">
+          <div className="grid items-start gap-14 lg:grid-cols-12">
+            <div className="lg:col-span-3">
+              <p className="text-xs text-slate-400">04</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.22em] text-vantum-lightGold">
+                Contact
+              </p>
+            </div>
+            <div className="lg:col-span-9">
+              <h2 className="max-w-4xl font-serif text-4xl leading-[1.08] text-white sm:text-5xl md:text-6xl">
+                Partner with Vantum Capital
+              </h2>
+              <p className="mt-8 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg">
+                For investor and partnership inquiries, please contact us at{" "}
+                <a
+                  href="mailto:info@vantumcap.com"
+                  className="text-vantum-lightGold underline underline-offset-4"
+                >
+                  info@vantumcap.com
+                </a>
+                .
+              </p>
+            </div>
+          </div>
         </div>
       </section>
     </main>
