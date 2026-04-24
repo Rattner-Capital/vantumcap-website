@@ -1,8 +1,10 @@
 import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
 
 export default function InsightsPage() {
   return (
-    <main className="min-h-screen bg-vantum-ink px-6 py-24 text-slate-100 sm:px-10">
+    <main className="min-h-screen bg-vantum-ink px-6 pb-24 pt-4 text-slate-100 sm:px-10 sm:pt-6">
+      <SiteHeader />
       <div className="mx-auto max-w-4xl">
         <h1 className="font-serif text-5xl">Insights</h1>
         <p className="mt-5 max-w-2xl text-lg text-slate-300">
