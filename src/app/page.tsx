@@ -45,12 +45,12 @@ export default function Home() {
           style={{ backgroundImage: "url('/hero-bg-clean.png')" }}
         />
 
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(8,14,25,0.88)_0%,rgba(8,14,25,0.58)_28%,rgba(8,14,25,0.18)_55%,rgba(8,14,25,0.1)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(8,14,25,0.84)_0%,rgba(8,14,25,0.5)_22%,rgba(8,14,25,0.18)_40%,rgba(8,14,25,0)_65%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(7,13,24,0.9)_0%,rgba(7,13,24,0.72)_26%,rgba(7,13,24,0.36)_48%,rgba(7,13,24,0.12)_72%,rgba(7,13,24,0.03)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(8,14,25,0.7)_0%,rgba(8,14,25,0.4)_22%,rgba(8,14,25,0.16)_44%,rgba(8,14,25,0)_70%)]" />
 
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-5 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-7 md:px-14 md:pt-9">
           <header className="relative flex items-center justify-between gap-4">
-            <div className="relative h-[56px] w-[180px] sm:h-[66px] sm:w-[230px]">
+            <div className="relative h-[74px] w-[240px] sm:h-[86px] sm:w-[300px]">
               <Image
                 src="/vantum-logo.png"
                 alt="Vantum Capital"
