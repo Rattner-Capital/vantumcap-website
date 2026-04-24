@@ -111,15 +111,16 @@ export default function Home() {
           <section className="flex flex-1 items-center pb-28 pt-16 sm:pt-24 lg:pb-36 lg:pt-28">
             <div className="max-w-2xl">
               <h1 className="font-serif text-5xl leading-[0.95] text-slate-100 sm:text-6xl md:text-7xl lg:text-[86px]">
-                Invested in
+                Turning Situational Complexity
                 <br />
-                Enduring Value
+                Into Outcomes
                 <span className="text-vantum-gold">.</span>
               </h1>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-200/95 sm:text-xl">
-                Vantum Capital is a multi-strategy investment firm focused on
-                generating consistent, risk-adjusted returns across market
-                cycles.
+                Vantum Capital invests in situations shaped by operational and
+                capital structure complexity, unlocking value through deep
+                research, rigorous underwriting, hands-on execution, and
+                disciplined risk management.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
