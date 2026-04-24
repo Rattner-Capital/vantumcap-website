@@ -30,12 +30,12 @@ export default function Home() {
     <main className="bg-vantum-ink text-white">
       <section className="relative min-h-screen overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/hero-bg-clean.png')" }}
+          className="absolute inset-0 bg-cover bg-[center_32%]"
+          style={{ backgroundImage: "url('/hero-clean.jpg')" }}
         />
 
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(7,13,24,0.9)_0%,rgba(7,13,24,0.72)_26%,rgba(7,13,24,0.36)_48%,rgba(7,13,24,0.12)_72%,rgba(7,13,24,0.03)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(8,14,25,0.7)_0%,rgba(8,14,25,0.4)_22%,rgba(8,14,25,0.16)_44%,rgba(8,14,25,0)_70%)]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
 
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-5 pb-8 pt-2 sm:px-8 sm:pb-10 sm:pt-3 md:px-14 md:pt-4">
           <SiteHeader overlay />
