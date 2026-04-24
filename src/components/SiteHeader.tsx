@@ -17,6 +17,14 @@ const navItems = [
 
 /** Tight-cropped logo PNGs in `public/` (no white mat); keeps layout height ≈ visible lockup. */
 const LOGO_INTRINSIC = { width: 2122, height: 649 } as const;
+/** Hero lockup from `vantum-logo-hero.png` (square canvas; opaque lockup ~666×204). */
+const HERO_LOGO_INTRINSIC = { width: 1000, height: 1000 } as const;
+/** Frame matches lockup aspect at the same heights as `logoLockupHeightClass` (h × 666/204). */
+const heroLogoFrameClass =
+  "relative h-[54px] w-[176px] shrink-0 overflow-hidden sm:h-[64px] sm:w-[209px] lg:h-[76px] lg:w-[248px]" as const;
+/** Oversized square so opaque content fills frame height (h × 1000/204); centered, object-contain. */
+const heroLogoImageClass =
+  "absolute left-1/2 top-1/2 h-[265px] w-[265px] max-w-none -translate-x-1/2 -translate-y-1/2 object-contain sm:h-[314px] sm:w-[314px] lg:h-[373px] lg:w-[373px]" as const;
 
 /** Matches powder inner pages (e.g. team listing) so the header lines up with body copy. */
 const POWDER_INNER =
@@ -115,18 +123,20 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
 
           <Link
             href="/"
-            className={`absolute left-0 top-0 z-50 block ${overlayHeroLiftClass} ${logoLockupHeightClass}`}
+            className={`absolute left-0 top-0 z-50 block ${overlayHeroLiftClass}`}
           >
-            <Image
-              src="/vantum-logo.png"
-              alt="Vantum Capital"
-              width={LOGO_INTRINSIC.width}
-              height={LOGO_INTRINSIC.height}
-              priority
-              quality={95}
-              sizes="(max-width: 640px) 240px, (max-width: 1024px) 280px, 320px"
-              className={`block w-auto max-w-none ${logoLockupHeightClass}`}
-            />
+            <div className={heroLogoFrameClass}>
+              <Image
+                src="/vantum-logo-hero.png"
+                alt="Vantum Capital"
+                width={HERO_LOGO_INTRINSIC.width}
+                height={HERO_LOGO_INTRINSIC.height}
+                priority
+                quality={95}
+                sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 380px"
+                className={heroLogoImageClass}
+              />
+            </div>
           </Link>
 
           <div
