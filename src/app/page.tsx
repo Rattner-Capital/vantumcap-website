@@ -37,63 +37,67 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-black/10 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
 
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-5 pb-8 pt-2 sm:px-8 sm:pb-10 sm:pt-3 md:px-14 md:pt-4">
-          <SiteHeader overlay />
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col pb-8 pt-2 sm:pb-10 sm:pt-3 md:pt-4">
+          <div className="shrink-0 px-5 sm:px-8 md:px-14">
+            <SiteHeader overlay />
+          </div>
 
-          <section className="relative z-0 shrink-0 pt-28 sm:pt-32 lg:pt-36 pb-8 sm:pb-10 lg:pb-12">
-            <div className="max-w-2xl">
-              <h1 className="font-serif text-4xl leading-[0.98] text-slate-100 sm:text-5xl md:text-6xl lg:text-[74px]">
-                Turning Complexity
-                <br />
-                Into Outcomes
-                <span className="text-vantum-gold">.</span>
-              </h1>
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-200/95 sm:text-xl">
-                Vantum Capital invests in situations shaped by operational and
-                capital structure complexity, unlocking value through deep
-                research, rigorous underwriting, hands-on execution, and
-                disciplined risk management.
-              </p>
+          <div className="flex min-h-0 flex-1 flex-col pl-4 pr-5 sm:pl-6 sm:pr-8 md:pl-10 md:pr-14">
+            <section className="relative z-0 shrink-0 pb-8 pt-32 sm:pb-10 sm:pt-36 lg:pb-12 lg:pt-40">
+              <div className="max-w-2xl">
+                <h1 className="font-serif text-4xl leading-[0.98] text-slate-100 sm:text-5xl md:text-6xl lg:text-[74px]">
+                  Turning Complexity
+                  <br />
+                  Into Outcomes
+                  <span className="text-vantum-gold">.</span>
+                </h1>
+                <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-200/95 sm:text-xl">
+                  Vantum Capital invests in situations shaped by operational and
+                  capital structure complexity, unlocking value through deep
+                  research, rigorous underwriting, hands-on execution, and
+                  disciplined risk management.
+                </p>
 
-              <div className="mt-8 flex flex-wrap gap-4">
-                <a
-                  href="/strategy"
-                  className="rounded-sm bg-vantum-gold px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-vantum-ink transition hover:bg-vantum-lightGold"
-                >
-                  Our Strategy
-                </a>
-                <a
-                  href="/about"
-                  className="rounded-sm border border-vantum-gold/70 bg-black/20 px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-vantum-lightGold transition hover:bg-vantum-gold/15"
-                >
-                  About Vantum
-                </a>
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <a
+                    href="/strategy"
+                    className="rounded-sm bg-vantum-gold px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-vantum-ink transition hover:bg-vantum-lightGold"
+                  >
+                    Our Strategy
+                  </a>
+                  <a
+                    href="/about"
+                    className="rounded-sm border border-vantum-gold/70 bg-black/20 px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-vantum-lightGold transition hover:bg-vantum-gold/15"
+                  >
+                    About Vantum
+                  </a>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section className="mt-auto mb-6 shrink-0 rounded-2xl border border-white/15 bg-[#0c1523]/55 shadow-glow backdrop-blur-md sm:mb-8">
-            <div className="grid grid-cols-1 divide-y divide-white/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
-              {features.map((feature) => (
-                <article
-                  key={feature.title}
-                  className="flex items-start gap-3 px-5 py-5 sm:px-6 lg:min-h-[112px]"
-                >
-                  <div className="pt-1 text-lg text-vantum-gold">
-                    {feature.icon}
-                  </div>
-                  <div>
-                    <h2 className="font-serif text-xl text-slate-100">
-                      {feature.title}
-                    </h2>
-                    <p className="mt-1 text-sm leading-relaxed text-slate-300/95">
-                      {feature.body}
-                    </p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
+            <section className="mt-auto mb-6 shrink-0 rounded-2xl border border-white/15 bg-[#0c1523]/55 shadow-glow backdrop-blur-md sm:mb-8">
+              <div className="grid grid-cols-1 divide-y divide-white/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
+                {features.map((feature) => (
+                  <article
+                    key={feature.title}
+                    className="flex items-start gap-3 px-5 py-5 sm:px-6 lg:min-h-[112px]"
+                  >
+                    <div className="pt-1 text-lg text-vantum-gold">
+                      {feature.icon}
+                    </div>
+                    <div>
+                      <h2 className="font-serif text-xl text-slate-100">
+                        {feature.title}
+                      </h2>
+                      <p className="mt-1 text-sm leading-relaxed text-slate-300/95">
+                        {feature.body}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </div>
         </div>
       </section>
 

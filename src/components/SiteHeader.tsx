@@ -48,7 +48,7 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
 
   const shellClass = overlay
     ? "relative z-40 w-full"
-    : "sticky top-0 z-40 border-b border-[#06173B]/15 bg-[#F2ECE7]";
+    : "relative z-40 w-full border-b border-[#06173B]/15 bg-[#F2ECE7]";
 
   const powderRowClass = `relative flex items-center justify-between gap-4 ${POWDER_INNER}`;
 
