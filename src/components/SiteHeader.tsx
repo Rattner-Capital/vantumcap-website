@@ -29,27 +29,14 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
     ? "border-vantum-lightGold/60 text-vantum-lightGold hover:border-vantum-lightGold hover:bg-vantum-lightGold/10"
     : "border-[#06173B]/40 text-[#06173B] hover:border-[#06173B] hover:bg-[#06173B]/10";
 
-  /** Hero only: slightly smaller lockup + absolute so nav row stays thin (interior uses powderLogoImgClass). */
-  const overlayLogoHeightClass = "h-[176px] sm:h-[200px] lg:h-[228px]";
-  /** ~10% of logo height — lift logo + nav together without changing sizes. */
+  /** Hero + powder: same rendered lockup height (no transform scale). */
+  const logoLockupHeightClass = "h-[54px] sm:h-[64px] lg:h-[76px]";
+  /** Small upward nudge so the lockup sits cleanly in the hero band (scales with shorter logo). */
   const overlayHeroLiftClass =
-    "-translate-y-[18px] sm:-translate-y-[20px] lg:-translate-y-[23px]";
-  /** Nav stays vertically centered on logo; `top` nudged up by same ~10% as logo lift. */
+    "-translate-y-1 sm:-translate-y-1.5 lg:-translate-y-2";
+  /** Nav vertically centered on the hero logo (half of 54 / 64 / 76). */
   const overlayNavCenterClass =
-    "top-[70px] -translate-y-1/2 sm:top-[80px] lg:top-[91px]";
-  /**
-   * Interior only: fixed slot keeps flex/nav/header metrics identical to before.
-   * Slightly larger *visual* logo via scale (layout box unchanged — avoids widening slot / moving nav).
-   */
-  const powderLogoSlotClass =
-    "relative block h-11 w-[144px] shrink-0 overflow-visible sm:h-14 sm:w-[183px] lg:h-[68px] lg:w-[222px]";
-  /**
-   * Match hero *rendered height* (overlayLogoHeightClass) without changing layout:
-   * scale = hero h / slot content h, where slot h is h-11 (44px), sm:h-14 (56px), lg:h-[68px].
-   * → 176/44 = 4, 200/56, 228/68 (no arbitrary scale guessing).
-   */
-  const powderLogoImgClass =
-    "block h-full w-auto origin-left object-contain scale-[calc(176/44)] sm:scale-[calc(200/56)] lg:scale-[calc(228/68)]";
+    "top-[27px] -translate-y-1/2 sm:top-[32px] lg:top-[38px]";
 
   const shellClass = overlay
     ? "relative z-40 w-full"
@@ -128,7 +115,7 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
 
           <Link
             href="/"
-            className={`absolute left-0 top-0 z-50 block ${overlayHeroLiftClass} ${overlayLogoHeightClass}`}
+            className={`absolute left-0 top-0 z-50 block ${overlayHeroLiftClass} ${logoLockupHeightClass}`}
           >
             <Image
               src="/vantum-logo.png"
@@ -137,8 +124,8 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
               height={LOGO_INTRINSIC.height}
               priority
               quality={95}
-              sizes="(max-width: 640px) 720px, (max-width: 1024px) 880px, 1000px"
-              className={`block w-auto max-w-none ${overlayLogoHeightClass}`}
+              sizes="(max-width: 640px) 240px, (max-width: 1024px) 280px, 320px"
+              className={`block w-auto max-w-none ${logoLockupHeightClass}`}
             />
           </Link>
 
@@ -152,7 +139,7 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
         </div>
       ) : (
         <div className={powderRowClass}>
-          <Link href="/" className={powderLogoSlotClass}>
+          <Link href="/" className="relative shrink-0">
             <Image
               src="/vantum-logo-powder.png"
               alt="Vantum Capital"
@@ -160,8 +147,8 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
               height={LOGO_INTRINSIC.height}
               priority
               quality={95}
-              sizes="(max-width: 640px) 280px, (max-width: 1024px) 340px, 400px"
-              className={powderLogoImgClass}
+              sizes="(max-width: 640px) 240px, (max-width: 1024px) 280px, 320px"
+              className={`block w-auto max-w-none ${logoLockupHeightClass}`}
             />
           </Link>
           {navDesktop}
