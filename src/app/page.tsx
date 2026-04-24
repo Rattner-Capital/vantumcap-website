@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const navItems = [
   { label: "About Us", href: "#about" },
@@ -41,7 +42,7 @@ export default function Home() {
       <section className="relative min-h-screen overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/hero-reference.png')" }}
+          style={{ backgroundImage: "url('/hero-bg-clean.png')" }}
         />
 
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(8,14,25,0.88)_0%,rgba(8,14,25,0.58)_28%,rgba(8,14,25,0.18)_55%,rgba(8,14,25,0.1)_100%)]" />
@@ -49,13 +50,14 @@ export default function Home() {
 
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-5 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-7 md:px-14 md:pt-9">
           <header className="relative flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-sm border border-vantum-lightGold/65 text-vantum-lightGold sm:h-12 sm:w-12">
-                VC
-              </div>
-              <div className="font-serif text-xl tracking-wide text-slate-100 sm:text-3xl">
-                Vantum Capital
-              </div>
+            <div className="relative h-[56px] w-[180px] sm:h-[66px] sm:w-[230px]">
+              <Image
+                src="/vantum-logo.png"
+                alt="Vantum Capital"
+                fill
+                priority
+                className="object-contain object-left"
+              />
             </div>
 
             <div className="hidden items-center gap-7 text-xs font-medium uppercase tracking-[0.12em] text-slate-200 lg:flex">
