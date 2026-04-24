@@ -39,9 +39,6 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
 
   /** Hero + powder: same rendered lockup height (no transform scale). */
   const logoLockupHeightClass = "h-[54px] sm:h-[64px] lg:h-[76px]";
-  /** Small upward nudge so the lockup sits cleanly in the hero band (scales with shorter logo). */
-  const overlayHeroLiftClass =
-    "-translate-y-1 sm:-translate-y-1.5 lg:-translate-y-2";
   /** Nav vertically centered on the hero logo (half of 54 / 64 / 76). */
   const overlayNavCenterClass =
     "top-[27px] -translate-y-1/2 sm:top-[32px] lg:top-[38px]";
@@ -123,9 +120,11 @@ export default function SiteHeader({ overlay = false }: SiteHeaderProps) {
 
           <Link
             href="/"
-            className={`absolute left-[-60px] top-[30px] z-50 block ${overlayHeroLiftClass}`}
+            className="absolute z-50 block max-sm:left-0 max-sm:top-2 max-sm:translate-y-0 sm:left-[-60px] sm:top-[30px] sm:-translate-y-1 sm:-translate-y-1.5 lg:-translate-y-2"
           >
-            <div className={heroLogoFrameClass}>
+            <div
+              className={`${heroLogoFrameClass} max-sm:origin-top-left max-sm:scale-[0.85]`}
+            >
               <Image
                 src="/vantum-logo-hero.png"
                 alt="Vantum Capital"

@@ -42,8 +42,8 @@ export default function Home() {
             <SiteHeader overlay />
           </div>
 
-          <div className="flex min-h-0 flex-1 flex-col pl-4 pr-5 sm:pl-6 sm:pr-8 md:pl-10 md:pr-14">
-            <section className="relative z-0 shrink-0 pb-8 pt-6 sm:pb-10 sm:pt-36 lg:pb-12 lg:pt-40">
+          <div className="flex min-h-0 flex-1 flex-col px-6 sm:pl-6 sm:pr-8 md:pl-10 md:pr-14">
+            <section className="relative z-0 shrink-0 pb-8 pt-20 sm:pb-10 sm:pt-36 lg:pb-12 lg:pt-40">
               <div className="max-w-2xl">
                 <h1 className="font-serif text-4xl leading-[0.98] text-slate-100 sm:text-5xl md:text-6xl lg:text-[74px]">
                   Turning Complexity
