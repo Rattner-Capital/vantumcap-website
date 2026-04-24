@@ -1,0 +1,43 @@
+0 verbose cli /opt/homebrew/Cellar/node/24.3.0/bin/node /opt/homebrew/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@11.4.2
+2 info using node@v24.3.0
+3 silly config load:file:/opt/homebrew/lib/node_modules/npm/npmrc
+4 warn Unknown env config "devdir". This will stop working in the next major version of npm.
+5 silly config load:file:/Users/samuelrattner/Documents/Test Kimi/.npmrc
+6 silly config load:file:/Users/samuelrattner/.npmrc
+7 silly config load:file:/opt/homebrew/etc/npmrc
+8 verbose title npm exec create-next-app@latest vantumcap-website --typescript --tailwind --eslint --app --src-dir --import-alias @/* --use-npm --yes
+9 verbose argv "exec" "--" "create-next-app@latest" "vantumcap-website" "--typescript" "--tailwind" "--eslint" "--app" "--src-dir" "--import-alias" "@/*" "--use-npm" "--yes"
+10 verbose logfile logs-max:10 dir:/Users/samuelrattner/Documents/Test Kimi/.npm-cache/_logs/2026-04-24T14_12_37_085Z-
+11 verbose logfile /Users/samuelrattner/Documents/Test Kimi/.npm-cache/_logs/2026-04-24T14_12_37_085Z-debug-0.log
+12 silly logfile done cleaning log files
+13 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+14 http fetch GET 200 https://registry.npmjs.org/npm 203ms
+15 http fetch GET 200 https://registry.npmjs.org/create-next-app 275ms (cache miss)
+16 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+17 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+18 warn exec The following package was not found and will be installed: create-next-app@16.2.4
+19 silly idealTree buildDeps
+20 silly fetch manifest create-next-app@16.2.4
+21 silly packumentCache full:https://registry.npmjs.org/create-next-app cache-miss
+22 http fetch GET 200 https://registry.npmjs.org/create-next-app 282ms (cache miss)
+23 silly packumentCache full:https://registry.npmjs.org/create-next-app set size:undefined disposed:false
+24 silly placeDep ROOT create-next-app@16.2.4 OK for:  want: 16.2.4
+25 silly reify moves {}
+26 silly audit bulk request { 'create-next-app': [ '16.2.4' ] }
+27 http cache create-next-app@https://registry.npmjs.org/create-next-app/-/create-next-app-16.2.4.tgz 0ms (cache hit)
+28 silly tarball no local data for create-next-app@https://registry.npmjs.org/create-next-app/-/create-next-app-16.2.4.tgz. Extracting by manifest.
+29 http fetch GET 200 https://registry.npmjs.org/create-next-app/-/create-next-app-16.2.4.tgz 87ms (cache miss)
+30 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 104ms
+31 silly audit report {}
+32 verbose cwd /Users/samuelrattner/Documents/Test Kimi
+33 verbose os Darwin 24.3.0
+34 verbose node v24.3.0
+35 verbose npm  v11.4.2
+36 notice
+36 notice New minor version of npm available! 11.4.2 -> 11.13.0
+36 notice Changelog: https://github.com/npm/cli/releases/tag/v11.13.0
+36 notice To update run: npm install -g npm@11.13.0
+36 notice  { force: true, Symbol(proc-log.meta): true }
+37 verbose exit 0
+38 info ok

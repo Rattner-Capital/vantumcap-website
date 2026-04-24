@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vantum Capital | Mobile Home Park Aggregation Strategy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style type="text/tailwindcss">
+        @layer base {
+            :root {
+                --primary: #06173B;
+                --secondary: #D1AF61;
+                --background: #F2ECE7;
+                --text-primary: #1a1a1a;
+                --text-secondary: #4a4a4a;
+                --text-muted: #6b6b6b;
+            }
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                background-color: var(--background);
+                color: var(--text-primary);
+                font-weight: 400;
+                letter-spacing: -0.01em;
+            }
+            h1, h2, h3, h4 {
+                font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+                color: var(--primary);
+                font-weight: 300;
+                letter-spacing: -0.02em;
+            }
+            h1 { font-weight: 300; letter-spacing: -0.03em; }
+            h2 { font-weight: 400; letter-spacing: -0.02em; }
+            h3 { font-weight: 400; letter-spacing: -0.01em; }
+        }
+        @layer components {
+            .slide {
+                min-height: 100vh;
+                box-sizing: border-box;
+                page-break-after: always;
+                break-after: page;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                background-color: var(--background);
+            }
+            .slide:last-of-type {
+                page-break-after: auto;
+                break-after: auto;
+            }
+            .slide-inner {
+                flex: 1 1 auto;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+            }
+            @media print {
+                .slide {
+                    page-break-inside: avoid !important;
+                    break-inside: avoid !important;
+                    overflow: hidden;
+                }
+                .slide canvas {
+                    max-width: 100% !important;
+                }
+            }
+            .slide-dark {
+                background-color: var(--primary);
+                color: white;
+            }
+            .slide-dark h1, .slide-dark h2, .slide-dark h3 {
+                color: white;
+                font-weight: 300;
+            }
+            .accent-line {
+                width: 60px;
+                height: 2px;
+                background-color: var(--secondary);
+            }
+            .stat-number {
+                font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+                font-weight: 400;
+                color: var(--primary);
+                letter-spacing: -0.03em;
+            }
+            .slide-dark .stat-number {
+                color: var(--secondary);
+                font-weight: 400;
+            }
+            .label-text {
+                font-family: 'Inter', sans-serif;
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+                font-weight: 500;
+                color: var(--text-muted);
+            }
+            .slide-dark .label-text {
+                color: rgba(255,255,255,0.6);
+                letter-spacing: 0.15em;
+            }
+            .highlight-gold {
+                color: var(--secondary);
+            }
+            .section-number {
+                font-family: 'Inter', sans-serif;
+                font-size: 0.75rem;
+                font-weight: 500;
+                letter-spacing: 0.2em;
+                color: var(--secondary);
+                text-transform: uppercase;
+            }
+            .data-table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            .data-table th {
+                font-family: 'Inter', sans-serif;
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                font-weight: 500;
+                color: var(--text-muted);
+                padding: 12px 16px;
+                text-align: left;
+                border-bottom: 1px solid #e5e5e5;
+            }
+            .data-table td {
+                padding: 16px;
+                font-size: 0.9rem;
+                border-bottom: 1px solid #f0f0f0;
+                font-weight: 400;
+            }
+            .chart-container {
+                background: white;
+                border-radius: 2px;
+                padding: 24px;
+            }
+            /* Keep charts from growing past the slide; avoid print page breaks inside figures */
+            .slide .chart-container {
+                max-height: min(520px, 58vh);
+                overflow: hidden;
+                box-sizing: border-box;
+            }
+            .slide .chart-container.chart-container--tall {
+                max-height: min(560px, 62vh);
+            }
+            .slide .chart-container.chart-container--regional {
+                max-height: 320px;
+            }
+            .regional-chart-panel {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                min-height: 0;
+                border: 1px solid #e5e5e5;
+                background: white;
+                border-radius: 2px;
+                overflow: hidden;
+            }
+            .regional-chart-panel .regional-chart-host {
+                position: relative;
+                width: 100%;
+                flex: 1;
+                min-height: 268px;
+                height: 288px;
+                max-height: 300px;
+            }
+            .regional-chart-host {
+                position: relative;
+                width: 100%;
+                height: 260px;
+                max-height: 260px;
+                flex-shrink: 0;
+            }
+            @media print {
+                .slide .chart-container {
+                    max-height: 4.75in;
+                    overflow: hidden;
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                }
+                .regional-chart-panel .regional-chart-host {
+                    height: 2.5in;
+                    max-height: 2.5in;
+                    min-height: 2.5in;
+                }
+                .regional-chart-host {
+                    height: 2.35in;
+                    max-height: 2.35in;
+                }
+            }
+            p, li {
+                font-weight: 400;
+                line-height: 1.6;
+            }
+            .flat-card {
+                background: white;
+                border: 1px solid #e5e5e5;
+            }
+            .flat-card-dark {
+                background: var(--primary);
+                color: white;
+            }
+            .accent-border-left {
+                border-left: 2px solid var(--secondary);
+            }
+            .divider {
+                height: 1px;
+                background: #e5e5e5;
+            }
+            .slide-dark .divider {
+                background: rgba(255,255,255,0.1);
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- SLIDE 1: Cover -->
+<div class="slide slide-dark flex flex-col justify-between p-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20">
+        <img src="https://images.squarespace-cdn.com/content/v1/5706fa71e32140a42a4402fa/1592513047847-FXNMQEBWG8FMNWP7GZ5F/Mobile+Home+Park+Investing.jpg"
+             class="w-full h-full object-cover" alt="Mobile Home Park Aerial" />
+    </div>
+    <div class="absolute inset-0 bg-[#06173B]/90"></div>
+
+    <div class="relative z-10 flex justify-between items-start">
+        <div class="flex items-center gap-3">
+            <span class="text-white/80 text-sm tracking-widest uppercase font-light">Vantum Capital</span>
+        </div>
+        <span class="text-white/40 text-xs tracking-widest uppercase">Confidential</span>
+    </div>
+
+    <div class="relative z-10 max-w-4xl">
+        <div class="section-number mb-6">Investment Strategy</div>
+        <h1 class="text-6xl md:text-7xl font-light leading-tight mb-8">
+            Mobile Home Park<br/>
+            <span class="text-[#D1AF61]">Aggregation Strategy</span>
+        </h1>
+        <p class="text-xl text-white/70 max-w-2xl leading-relaxed font-light">
+            Manufacturing institutional-quality portfolios from sub-institutional assets through systematic aggregation and operational transformation.
+        </p>
+    </div>
+
+    <div class="relative z-10 grid grid-cols-3 gap-12 border-t border-white/10 pt-8">
+        <div>
+            <div class="label-text mb-2">Geographic Focus</div>
+            <div class="text-white font-light">U.S. Midwest</div>
+            <div class="text-white/50 text-sm">Ohio, Indiana, Michigan</div>
+        </div>
+        <div>
+            <div class="label-text mb-2">Target Scale</div>
+            <div class="text-white font-light">250–400 Pads</div>
+            <div class="text-white/50 text-sm">Institutional threshold</div>
+        </div>
+        <div>
+            <div class="label-text mb-2">Value Creation</div>
+            <div class="text-white font-light">Cap Rate Compression</div>
+            <div class="text-white/50 text-sm">300–450 bps spread</div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-8 right-16 text-white/30 text-xs">
+        April 2026
+    </div>
+</div>
+
+<!-- SLIDE 2: Executive Summary -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">01</div>
+            <h2 class="text-4xl font-normal">Executive Summary</h2>
+        </div>
+        <div class="text-sm text-gray-400">Core Thesis</div>
+    </div>
+
+    <div class="slide-inner">
+    <div class="grid grid-cols-12 gap-10 flex-1 min-h-0">
+        <div class="col-span-7 flex flex-col min-h-0">
+            <p class="text-lg leading-relaxed text-gray-700 mb-6 flex-shrink-0">
+                We acquire small, sub-institutional manufactured housing communities (MHPs) at discounted pricing,
+                aggregate them into scaled portfolios, and exit at institutional valuations—capturing value through
+                structural market inefficiencies that persist in this highly fragmented asset class.
+            </p>
+
+            <div class="space-y-5 flex-1 min-h-0">
+                <div class="flex gap-5">
+                    <div class="w-8 h-8 border border-[#06173B] flex items-center justify-center flex-shrink-0">
+                        <span class="text-[#06173B] font-serif text-sm">01</span>
+                    </div>
+                    <div>
+                        <h4 class="font-normal text-lg mb-1">Entry Strategy</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Target 25–50 pad parks trading at 9–12% cap rates—too small for institutional buyers,
+                            creating persistent pricing inefficiencies in Midwest markets.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex gap-5">
+                    <div class="w-8 h-8 border border-[#06173B] flex items-center justify-center flex-shrink-0">
+                        <span class="text-[#06173B] font-serif text-sm">02</span>
+                    </div>
+                    <div>
+                        <h4 class="font-normal text-lg mb-1">Value Creation</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Convert Park-Owned Homes (POH) to Tenant-Owned Homes (TOH), implement RUBS,
+                            normalize rents, and achieve operational scale through clustering.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex gap-5">
+                    <div class="w-8 h-8 border border-[#06173B] flex items-center justify-center flex-shrink-0">
+                        <span class="text-[#06173B] font-serif text-sm">03</span>
+                    </div>
+                    <div>
+                        <h4 class="font-normal text-lg mb-1">Exit Strategy</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Sell 250–400 pad institutional-quality portfolios at 5.75–6.5% cap rates to
+                            public REITs (ELS, Sun, UMH) and institutional PE platforms.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-5 flex flex-col gap-4 min-h-0">
+            <div class="flat-card p-6 accent-border-left flex-shrink-0">
+                <div class="label-text mb-2">Entry Cap Rate</div>
+                <div class="stat-number text-5xl mb-1">9–12%</div>
+                <div class="text-sm text-gray-500">Sub-institutional assets</div>
+            </div>
+
+            <div class="flat-card-dark p-6 flex-shrink-0">
+                <div class="label-text mb-2 text-white/60">Exit Cap Rate</div>
+                <div class="text-5xl font-serif mb-1 text-[#D1AF61]">5.75–6.5%</div>
+                <div class="text-sm text-white/60">Institutional portfolios</div>
+            </div>
+
+            <div class="p-5 border border-[#D1AF61] flex-shrink-0">
+                <div class="text-[#06173B] text-sm font-medium uppercase tracking-wider mb-1">Value Creation</div>
+                <div class="text-[#06173B] text-3xl font-serif">300–450 bps</div>
+                <div class="text-gray-500 text-sm">Cap rate compression</div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- SLIDE 3: Market Opportunity -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">02</div>
+            <h2 class="text-4xl font-normal">The Fragmentation Opportunity</h2>
+        </div>
+        <div class="text-sm text-gray-400">Market Context</div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-12 flex-1">
+        <div>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed">
+                The manufactured housing market is characterized by extreme fragmentation, with the vast majority
+                of assets owned by non-institutional operators—creating a structural opportunity for aggregation
+                and value creation.
+            </p>
+
+            <div class="chart-container chart-container--tall mb-6 min-h-[280px]">
+                <canvas id="ownershipChart" height="250"></canvas>
+            </div>
+            <p class="text-xs text-gray-500 text-center">U.S. Mobile Home Park Ownership Structure</p>
+        </div>
+
+        <div class="space-y-6">
+            <div class="flat-card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="text-3xl font-serif text-[#06173B]">43,000–50,000</div>
+                        <div class="text-sm text-gray-500">Total MHPs in U.S.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flat-card p-6 accent-border-left">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="text-3xl font-serif text-[#06173B]">~85%</div>
+                        <div class="text-sm text-gray-500">Mom-and-Pop Owned</div>
+                    </div>
+                </div>
+                <div class="mt-3 text-xs text-gray-400">Non-institutional ownership creates inefficiency</div>
+            </div>
+
+            <div class="flat-card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="text-3xl font-serif text-[#06173B]">~23%</div>
+                        <div class="text-sm text-gray-500">Institutional Share</div>
+                    </div>
+                </div>
+                <div class="mt-3 text-xs text-gray-400">Up from 13% (2017–2019)</div>
+            </div>
+
+            <div class="flat-card-dark p-6 mt-6">
+                <h4 class="font-serif text-lg mb-3 text-[#D1AF61]">Supply Constraints</h4>
+                <p class="text-sm text-white/80 leading-relaxed">
+                    Zoning restrictions and community opposition have effectively blocked new MHP development
+                    in most markets for decades. With 4.2M total sites and limited new supply, existing
+                    communities benefit from significant pricing power.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4: Why Small Parks Trade at Discount -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">03</div>
+            <h2 class="text-4xl font-normal">Why Small Parks Trade at a Discount</h2>
+        </div>
+        <div class="text-sm text-gray-400">Pricing Inefficiency</div>
+    </div>
+
+    <p class="text-gray-600 mb-8 max-w-4xl">
+        Small parks (25–50 pads) trade at significant yield premiums to institutional portfolios due to structural
+        factors that create an exploitable market inefficiency.
+    </p>
+
+    <div class="grid grid-cols-12 gap-8 flex-1">
+        <div class="col-span-5">
+            <div class="chart-container chart-container--tall h-full min-h-[320px]">
+                <canvas id="capRateChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-span-7 space-y-4">
+            <div class="flat-card p-5 accent-border-left">
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 border border-gray-200 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#06173B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="font-normal text-lg mb-1">Operational Complexity</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            Small parks have higher per-unit management costs and lack economies of scale in
+                            operations, maintenance, and administration.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flat-card p-5 accent-border-left">
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 border border-gray-200 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#06173B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="font-normal text-lg mb-1">Limited Financing Options</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            Agency financing (FNMA/FHLMC) requires 50+ pads minimum, forcing small park buyers
+                            into expensive bank debt or seller financing.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flat-card p-5">
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 border border-gray-200 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="font-normal text-lg mb-1">Restricted Buyer Pool</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            Institutional buyers cannot deploy capital efficiently below 100+ pads, limiting
+                            competition and compressing pricing for small assets.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flat-card-dark p-5 mt-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="text-sm text-white/60 uppercase tracking-wider">The Opportunity</div>
+                        <div class="text-sm text-white/80 mt-1 max-w-md">
+                            By aggregating 6–12 small parks into a 250–400 pad portfolio, we transform
+                            sub-institutional assets into an institutional-quality offering.
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl font-serif text-[#D1AF61]">300–450 bps</div>
+                        <div class="text-xs text-white/60">Cap Rate Differential</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5: POH vs TOH -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">04</div>
+            <h2 class="text-4xl font-normal">POH vs TOH: The Value Differential</h2>
+        </div>
+        <div class="text-sm text-gray-400">Value Driver</div>
+    </div>
+
+    <p class="text-gray-600 mb-8 max-w-4xl">
+        Converting Park-Owned Homes (POH) to Tenant-Owned Homes (TOH) is a core value driver—TOH portfolios
+        command premium pricing due to lower risk profile and superior financing options.
+    </p>
+
+    <div class="grid grid-cols-2 gap-8 flex-1">
+        <div class="flat-card">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 border border-gray-200 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-serif font-normal text-gray-800">POH Model</h3>
+                        <div class="text-xs text-gray-500 uppercase tracking-wider">Park-Owned Homes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div>
+                    <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Structure</div>
+                    <p class="text-sm text-gray-600">Park owns homes and rents to tenants—similar to apartment model with higher management intensity.</p>
+                </div>
+
+                <div>
+                    <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Challenges</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• High maintenance & repair costs</li>
+                        <li>• Turnover risk and vacancy exposure</li>
+                        <li>• Capital-intensive operations</li>
+                    </ul>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider">Typical Cap Rate</div>
+                            <div class="text-4xl font-serif text-gray-400">10–12%</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-gray-400 uppercase tracking-wider">Financing</div>
+                            <div class="text-sm text-gray-500">Limited Options</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flat-card-dark">
+            <div class="p-6 border-b border-white/10">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 border border-white/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#D1AF61]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-serif font-normal text-white">TOH Model</h3>
+                        <div class="text-xs text-[#D1AF61] uppercase tracking-wider">Tenant-Owned Homes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div>
+                    <div class="text-xs text-white/40 uppercase tracking-wider mb-1">Structure</div>
+                    <p class="text-sm text-white/80">Residents own homes, pay lot rent only—land lease model with minimal management overhead.</p>
+                </div>
+
+                <div>
+                    <div class="text-xs text-white/40 uppercase tracking-wider mb-1">Advantages</div>
+                    <ul class="text-sm text-white/80 space-y-1">
+                        <li>• "Sticky" tenants—high switching costs ($5,000+ to move)</li>
+                        <li>• Lower maintenance & management costs</li>
+                        <li>• Resident pride of ownership</li>
+                    </ul>
+                </div>
+
+                <div class="pt-4 border-t border-white/10">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <div class="text-xs text-white/40 uppercase tracking-wider">Typical Cap Rate</div>
+                            <div class="text-4xl font-serif text-[#D1AF61]">6–7%</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-white/40 uppercase tracking-wider">Financing</div>
+                            <div class="text-sm text-[#D1AF61]">Agency Eligible</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6 border border-[#D1AF61] p-5 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <svg class="w-6 h-6 text-[#D1AF61]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+            </svg>
+            <div>
+                <div class="text-[#06173B] font-medium">Conversion Strategy</div>
+                <div class="text-gray-600 text-sm">Sell POH to residents via rent-to-own → Achieve ≥75% TOH at exit</div>
+            </div>
+        </div>
+        <div class="text-right">
+            <div class="text-gray-400 text-xs uppercase tracking-wider">Cap Rate Improvement</div>
+            <div class="text-[#06173B] text-3xl font-serif">300–500 bps</div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6: Anchor + Satellite Model -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">05</div>
+            <h2 class="text-4xl font-normal">Anchor + Satellite Model</h2>
+        </div>
+        <div class="text-sm text-gray-400">Portfolio Strategy</div>
+    </div>
+
+    <p class="text-gray-600 mb-8 max-w-4xl">
+        Our cluster strategy creates operational efficiencies by combining anchor parks (operational hubs)
+        with satellite parks (high-yield acquisitions) within concentrated geographic zones.
+    </p>
+
+    <div class="grid grid-cols-12 gap-8 flex-1">
+        <div class="col-span-5">
+            <div class="h-full">
+                <img src="https://www.datacompusa.com/wp-content/uploads/2023/10/AutumnLeafEstates_occupancy_pricing_web.jpg"
+                     class="w-full h-64 object-cover mb-4" alt="Mobile Home Park Cluster" />
+                <p class="text-xs text-gray-500 text-center">Cluster Model Visualization</p>
+            </div>
+        </div>
+
+        <div class="col-span-7 space-y-4">
+            <div class="flat-card-dark p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <svg class="w-6 h-6 text-[#D1AF61]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <h3 class="font-serif text-xl font-normal">Anchor Parks</h3>
+                </div>
+                <div class="text-sm text-white/60 mb-4">Operational Hubs</div>
+                <div class="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                        <div class="text-white/40 text-xs uppercase">Target Size</div>
+                        <div class="text-white font-light">75–125 pads</div>
+                    </div>
+                    <div>
+                        <div class="text-white/40 text-xs uppercase">Function</div>
+                        <div class="text-white font-light">Management & Operations</div>
+                    </div>
+                    <div>
+                        <div class="text-white/40 text-xs uppercase">Per Cluster</div>
+                        <div class="text-white font-light">1–2 parks</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flat-card p-6 accent-border-left">
+                <div class="flex items-center gap-3 mb-4">
+                    <svg class="w-6 h-6 text-[#D1AF61]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>
+                    </svg>
+                    <h3 class="font-serif text-xl font-normal text-[#06173B]">Satellite Parks</h3>
+                </div>
+                <div class="text-sm text-gray-500 mb-4">High-Yield Targets</div>
+                <div class="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                        <div class="text-gray-400 text-xs uppercase">Target Size</div>
+                        <div class="text-[#06173B] font-light">25–50 pads</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-400 text-xs uppercase">Function</div>
+                        <div class="text-[#06173B] font-light">Value-Add Acquisitions</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-400 text-xs uppercase">Per Cluster</div>
+                        <div class="text-[#06173B] font-light">4–6 parks</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div class="flat-card p-4 text-center">
+                    <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Target Portfolio</div>
+                    <div class="text-2xl font-serif text-[#06173B]">250–400</div>
+                    <div class="text-xs text-gray-500">Pads at Exit</div>
+                </div>
+                <div class="flat-card p-4 text-center accent-border-left">
+                    <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">TOH Mix</div>
+                    <div class="text-2xl font-serif text-[#06173B]">≥75%</div>
+                    <div class="text-xs text-gray-500">Tenant-Owned</div>
+                </div>
+                <div class="flat-card p-4 text-center">
+                    <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Clusters</div>
+                    <div class="text-2xl font-serif text-[#06173B]">2–3</div>
+                    <div class="text-xs text-gray-500">Midwest Markets</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7: Cap Rate Compression (primary value driver) -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-6 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">06</div>
+            <h2 class="text-4xl font-normal">Cap Rate Compression</h2>
+        </div>
+        <div class="text-sm text-gray-400">Primary Driver</div>
+    </div>
+
+    <p class="text-gray-600 mb-6 max-w-3xl flex-shrink-0">
+        Returns are generated primarily through cap rate compression from aggregation and TOH conversion—<span class="text-[#06173B] font-medium">75–80%</span> of total value creation.
+    </p>
+
+    <div class="slide-inner flex-1 flex items-stretch min-h-0">
+        <div class="flat-card-dark flex flex-col w-full max-w-6xl mx-auto overflow-hidden">
+            <div class="text-center px-8 pt-10 pb-8 border-b border-white/10">
+                <div class="text-xs text-[#D1AF61] uppercase tracking-widest mb-3">Share of value creation</div>
+                <div class="text-8xl font-serif text-[#D1AF61] leading-none tracking-tight">75–80%</div>
+                <div class="text-white/55 text-sm mt-3">of total value creation</div>
+            </div>
+
+            <div class="grid grid-cols-3 divide-x divide-white/10 border-b border-white/10">
+                <div class="p-5 px-4">
+                    <div class="text-[10px] text-white/45 uppercase tracking-wider mb-2">Entry pricing</div>
+                    <p class="text-xs text-white/85 leading-relaxed">Acquire at 9–12% cap rates due to small size and operational complexity.</p>
+                </div>
+                <div class="p-5 px-4">
+                    <div class="text-[10px] text-white/45 uppercase tracking-wider mb-2">Aggregation</div>
+                    <p class="text-xs text-white/85 leading-relaxed">Combine 6–12 parks into a 250–400 pad portfolio with operational infrastructure.</p>
+                </div>
+                <div class="p-5 px-4">
+                    <div class="text-[10px] text-white/45 uppercase tracking-wider mb-2">Exit pricing</div>
+                    <p class="text-xs text-white/85 leading-relaxed">Sell at 5.75–6.5% cap rates to institutional buyers seeking scale.</p>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center px-8 py-6">
+                <span class="text-sm text-white/55 uppercase tracking-wider">Cap rate compression</span>
+                <span class="text-4xl font-serif text-[#D1AF61]">300–450 bps</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8: NOI Growth (secondary value driver) -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-6 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">07</div>
+            <h2 class="text-4xl font-normal">NOI Growth</h2>
+        </div>
+        <div class="text-sm text-gray-400">Secondary Driver</div>
+    </div>
+
+    <p class="text-gray-600 mb-6 max-w-3xl flex-shrink-0">
+        NOI growth from operational improvements contributes the remaining <span class="text-[#06173B] font-medium">20–25%</span> of value and enhances cash flow and downside protection.
+    </p>
+
+    <div class="slide-inner flex-1 flex flex-col min-h-0 gap-5">
+        <div class="flat-card flex flex-col max-w-5xl mx-auto w-full overflow-hidden">
+            <div class="text-center px-8 pt-8 pb-6 border-b border-gray-100 bg-white">
+                <div class="text-xs text-gray-500 uppercase tracking-widest mb-2">Secondary driver</div>
+                <div class="text-6xl font-serif text-[#06173B] leading-none">20–25%</div>
+                <div class="text-gray-500 text-sm mt-2">of total value creation</div>
+            </div>
+
+            <div class="grid grid-cols-3 divide-x divide-gray-100 bg-white">
+                <div class="p-4 px-4 border-l-2 border-[#D1AF61] pl-4">
+                    <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1.5">RUBS implementation</div>
+                    <p class="text-xs text-gray-700 leading-relaxed">Sub-metering and utility bill-back can increase NOI by <span class="font-medium text-[#06173B]">15–30%</span></p>
+                </div>
+                <div class="p-4 px-4">
+                    <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1.5">Rent normalization</div>
+                    <p class="text-xs text-gray-700 leading-relaxed">Bring below-market rents to competitive levels—$50/month increase = $600K+ value</p>
+                </div>
+                <div class="p-4 px-4">
+                    <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1.5">Operational efficiency</div>
+                    <p class="text-xs text-gray-700 leading-relaxed">Cluster model reduces per-unit costs through shared management and maintenance</p>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center px-8 py-5 border-t border-gray-100 bg-gray-50/80">
+                <span class="text-xs text-gray-500 uppercase tracking-wider">NOI growth target</span>
+                <span class="text-3xl font-serif text-[#06173B]">10–15%</span>
+            </div>
+        </div>
+
+        <div class="flat-card p-4 max-w-5xl mx-auto w-full bg-[#F2ECE7] flex gap-3 items-start">
+            <svg class="w-5 h-5 text-[#06173B] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+            <p class="text-gray-600 text-sm leading-relaxed">
+                <span class="font-medium text-[#06173B]">Combined impact:</span>
+                Cap rate compression provides the majority of returns through structural market arbitrage, while NOI growth enhances cash flow and provides downside protection—creating a compelling asymmetric return profile.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9: Illustrative — Entry -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-6 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">08</div>
+            <h2 class="text-4xl font-normal">Illustrative Entry</h2>
+        </div>
+        <div class="text-sm text-gray-400 text-right">The Math · Illustrative</div>
+    </div>
+
+    <p class="text-gray-600 mb-6 max-w-2xl flex-shrink-0">
+        Baseline acquisition economics for an illustrative 320-pad, eight-park portfolio.
+    </p>
+
+    <div class="slide-inner flex-1 flex items-center justify-center min-h-0">
+        <div class="flat-card w-full max-w-4xl overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex items-center gap-2">
+                <div class="w-8 h-8 border border-gray-200 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                    </svg>
+                </div>
+                <h3 class="font-serif text-xl font-normal text-gray-800">Entry</h3>
+            </div>
+            <div class="p-8 text-center border-b border-gray-100 bg-gray-50/50">
+                <div class="label-text mb-2">Implied value</div>
+                <div class="text-7xl font-serif text-[#06173B] leading-none mb-2">$22.2M</div>
+                <div class="text-sm text-gray-500">$2.0M NOI ÷ 9.0% cap rate</div>
+            </div>
+            <div class="grid grid-cols-2 gap-6 p-6 text-left">
+                <div>
+                    <div class="text-xs text-gray-400 uppercase mb-1">Portfolio NOI</div>
+                    <div class="text-2xl font-serif text-[#06173B]">$2.0M</div>
+                </div>
+                <div>
+                    <div class="text-xs text-gray-400 uppercase mb-1">Entry Cap Rate</div>
+                    <div class="text-2xl font-serif text-[#06173B]">9.0%</div>
+                </div>
+                <div class="col-span-2 pt-4 border-t border-gray-100">
+                    <div class="text-xs text-gray-400 uppercase mb-1">Composition</div>
+                    <div class="text-sm text-gray-600">8 parks · 320 pads · 60% TOH</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10: Illustrative — Value Creation -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-6 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">09</div>
+            <h2 class="text-4xl font-normal">Illustrative Value Creation</h2>
+        </div>
+        <div class="text-sm text-gray-400 text-right">The Math · Illustrative</div>
+    </div>
+
+    <p class="text-gray-600 mb-6 max-w-2xl flex-shrink-0">
+        NOI lift and TOH conversion bridge to institutional-quality exit NOI over a 3–5 year hold.
+    </p>
+
+    <div class="slide-inner flex-1 flex items-center min-h-0">
+        <div class="flat-card accent-border-left w-full max-w-4xl mx-auto overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex items-center gap-2">
+                <div class="w-8 h-8 border border-[#D1AF61] flex items-center justify-center">
+                    <svg class="w-4 h-4 text-[#D1AF61]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <h3 class="font-serif text-xl font-normal text-[#06173B]">Value Creation</h3>
+            </div>
+            <div class="p-8 text-center bg-[#F2ECE7]/80">
+                <div class="label-text mb-2">Exit NOI</div>
+                <div class="text-7xl font-serif text-[#06173B] leading-none mb-2">$2.3M</div>
+                <div class="text-sm text-gray-500">+15% vs. entry — RUBS, rents, operational lift</div>
+            </div>
+            <div class="p-6 space-y-5">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="border-l-2 border-[#D1AF61] pl-4">
+                        <div class="text-xs text-[#06173B]/60 uppercase mb-1">NOI Growth</div>
+                        <div class="text-3xl font-serif text-[#06173B]">+$300K</div>
+                        <div class="text-xs text-gray-500 mt-1">RUBS + rent normalization</div>
+                    </div>
+                    <div class="border-l-2 border-[#06173B] pl-4">
+                        <div class="text-xs text-[#06173B]/60 uppercase mb-1">TOH Conversion</div>
+                        <div class="text-3xl font-serif text-[#06173B]">60% → 80%</div>
+                        <div class="text-xs text-gray-500 mt-1">Sell POH to residents</div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center pt-6 border-t border-gray-100 text-sm">
+                    <span class="text-gray-500 uppercase tracking-wider text-xs">Hold Period</span>
+                    <span class="text-[#06173B] font-medium">3–5 years</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11: Illustrative — Exit -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-6 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">10</div>
+            <h2 class="text-4xl font-normal">Illustrative Exit</h2>
+        </div>
+        <div class="text-sm text-gray-400 text-right">The Math · Illustrative</div>
+    </div>
+
+    <p class="text-gray-600 mb-6 max-w-2xl flex-shrink-0">
+        Exit at institutional cap rates on stabilized, scaled NOI.
+    </p>
+
+    <div class="slide-inner flex-1 flex items-center min-h-0">
+        <div class="flat-card-dark w-full max-w-4xl mx-auto overflow-hidden">
+            <div class="p-6 border-b border-white/10 flex items-center gap-2">
+                <div class="w-8 h-8 border border-white/20 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-[#D1AF61]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                </div>
+                <h3 class="font-serif text-xl font-normal text-white">Exit</h3>
+            </div>
+            <div class="p-8 text-center border-b border-white/10">
+                <div class="text-xs text-white/40 uppercase tracking-wider mb-2">Exit value</div>
+                <div class="text-7xl font-serif text-white leading-none mb-2">$36.8M</div>
+                <div class="text-sm text-white/50">$2.3M NOI ÷ 6.25% cap rate</div>
+            </div>
+            <div class="grid grid-cols-2 gap-6 p-6">
+                <div>
+                    <div class="text-xs text-white/40 uppercase mb-1">Exit NOI</div>
+                    <div class="text-2xl font-serif text-[#D1AF61]">$2.3M</div>
+                </div>
+                <div>
+                    <div class="text-xs text-white/40 uppercase mb-1">Exit Cap Rate</div>
+                    <div class="text-2xl font-serif text-[#D1AF61]">6.25%</div>
+                </div>
+            </div>
+            <div class="border border-[#D1AF61] p-6 mx-6 mb-6 text-center">
+                <div class="text-xs text-[#D1AF61]/70 uppercase mb-1">Total value creation</div>
+                <div class="text-5xl font-serif text-[#D1AF61]">$14.6M</div>
+                <div class="text-xs text-[#D1AF61]/70 mt-1">66% gross return</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12: Value bridge -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-6 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">11</div>
+            <h2 class="text-4xl font-normal">Value Creation Bridge</h2>
+        </div>
+        <div class="text-sm text-gray-400 text-right">Illustrative · The Math</div>
+    </div>
+
+    <p class="text-gray-600 mb-6 max-w-2xl flex-shrink-0">
+        Attribution of exit value between NOI growth and cap rate compression.
+    </p>
+
+    <div class="slide-inner flex-1 flex flex-col justify-center min-h-0">
+        <div class="flat-card p-8 max-w-5xl mx-auto w-full">
+            <h4 class="font-serif text-lg mb-8 text-[#06173B] font-normal text-center tracking-tight">Entry → Value drivers → Exit</h4>
+            <div class="flex items-end justify-center gap-8 lg:gap-12 flex-nowrap overflow-x-auto pb-2 min-h-[10rem]">
+                <div class="flex flex-col items-center w-24 flex-shrink-0">
+                    <div class="text-sm font-medium text-[#06173B] mb-2">$22.2M</div>
+                    <div class="w-full max-w-[5rem] bg-gray-300 mx-auto" style="height: 64px;"></div>
+                    <div class="text-xs text-gray-500 mt-2 uppercase tracking-wider">Entry</div>
+                </div>
+                <div class="text-gray-300 text-2xl mb-10 flex-shrink-0">→</div>
+                <div class="flex flex-col items-center w-24 flex-shrink-0">
+                    <div class="text-sm font-medium text-[#06173B] mb-2">$3.2M</div>
+                    <div class="w-full max-w-[5rem] bg-[#D1AF61] mx-auto" style="height: 18px;"></div>
+                    <div class="text-xs text-gray-500 mt-2 text-center leading-tight">NOI<br/>growth</div>
+                </div>
+                <div class="flex flex-col items-center w-24 flex-shrink-0">
+                    <div class="text-sm font-medium text-[#06173B] mb-2">$11.4M</div>
+                    <div class="w-full max-w-[5rem] bg-[#06173B] mx-auto" style="height: 56px;"></div>
+                    <div class="text-xs text-gray-500 mt-2 text-center leading-tight">Cap rate<br/>compression</div>
+                </div>
+                <div class="text-gray-300 text-2xl mb-10 flex-shrink-0">=</div>
+                <div class="flex flex-col items-center w-24 flex-shrink-0">
+                    <div class="text-sm font-semibold text-[#D1AF61] mb-2">$36.8M</div>
+                    <div class="w-full max-w-[5rem] border-2 border-[#D1AF61] mx-auto bg-white" style="height: 104px;"></div>
+                    <div class="text-xs text-gray-500 mt-2 uppercase tracking-wider">Exit</div>
+                </div>
+            </div>
+            <div class="flex justify-center flex-wrap gap-x-10 gap-y-3 mt-10 pt-6 border-t border-gray-100 text-xs">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-[#06173B] flex-shrink-0"></div>
+                    <span class="text-gray-600">Cap rate compression (78%)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-[#D1AF61] flex-shrink-0"></div>
+                    <span class="text-gray-600">NOI growth (22%)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Addendum Title -->
+<div class="slide slide-dark flex flex-col justify-center items-center p-16 relative">
+    <div class="absolute inset-0 opacity-10">
+        <img src="https://media.istockphoto.com/id/1478909526/photo/mobile-home-park-age-restricted-community-in-small-beach-town-in-california.jpg?s=612x612&amp;w=0&amp;k=20&amp;c=WoJ6z-gkfeHxXPlBTfGZyALSZZindRF0Lhw5IORL9Oc%3D"
+             class="w-full h-full object-cover" alt="Community Street View" />
+    </div>
+    <div class="absolute inset-0 bg-[#06173B]/90"></div>
+
+    <div class="text-center relative z-10">
+        <div class="section-number mb-6">Addendum</div>
+        <h1 class="text-5xl font-serif font-normal mb-6">Market Intelligence<br/>&amp; Industry Context</h1>
+        <div class="w-24 h-0.5 bg-[#D1AF61] mx-auto mb-6"></div>
+        <p class="text-white/60 max-w-xl mx-auto leading-relaxed">
+            Supporting data, market trends, and institutional context reinforcing the investment thesis
+        </p>
+    </div>
+</div>
+
+<!-- Addendum 1: Institutional Market Trends -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">A.01</div>
+            <h2 class="text-4xl font-normal">Institutional Market Trends</h2>
+        </div>
+        <div class="text-sm text-gray-400">Market Context</div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8 flex-1">
+        <div>
+            <p class="text-gray-600 mb-6 leading-relaxed">
+                Institutional capital continues to view manufactured housing communities as a compelling combination
+                of social need and risk-adjusted return. The sector has evolved from a "mom-and-pop" niche to a
+                validated institutional asset class.
+            </p>
+
+            <div class="flat-card p-5 mb-4">
+                <div class="flex justify-between items-start mb-4">
+                    <h4 class="font-normal text-[#06173B]">Major Institutional Players</h4>
+                    <span class="text-xs text-gray-400">2024–2025</span>
+                </div>
+                <table class="w-full text-sm">
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2 text-gray-600">Blackstone (Treehouse)</td>
+                        <td class="py-2 text-right text-[#06173B]">~$1B deployed</td>
+                    </tr>
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2 text-gray-600">Apollo (Inspire)</td>
+                        <td class="py-2 text-right text-[#06173B]">100+ parks</td>
+                    </tr>
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2 text-gray-600">Brookfield (Yes!)</td>
+                        <td class="py-2 text-right text-[#D1AF61]">$10B+ deal</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 text-gray-600">Drake Real Estate</td>
+                        <td class="py-2 text-right text-[#06173B]">$515M Fund V</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="flat-card-dark p-5">
+                <h4 class="font-serif text-lg mb-3 text-[#D1AF61] font-normal">Transaction Velocity Recovery</h4>
+                <p class="text-sm text-white/80 leading-relaxed">
+                    After a quieter 2022–2023, sales velocity rebounded significantly. HARRI5 closed
+                    $800M across 27 transactions in 2025, up from $95.8M pipeline entering the year.
+                    Michigan re-entered top 5 states for activity.
+                </p>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <div class="chart-container chart-container--tall min-h-[260px]">
+                <canvas id="institutionalGrowthChart"></canvas>
+            </div>
+            <p class="text-xs text-gray-500 text-center">Institutional Ownership Growth (2017–2025)</p>
+
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <div class="flat-card p-4 text-center accent-border-left">
+                    <div class="text-3xl font-serif text-[#06173B]">23%</div>
+                    <div class="text-xs text-gray-500 mt-1">Institutional Share (2025)</div>
+                    <div class="text-xs text-[#D1AF61] mt-1">↑ from 13% (2017–2019)</div>
+                </div>
+                <div class="flat-card p-4 text-center">
+                    <div class="text-3xl font-serif text-[#06173B]">$9.4B</div>
+                    <div class="text-xs text-gray-500 mt-1">PE Investment (2021)</div>
+                    <div class="text-xs text-gray-400 mt-1">Peak transaction year</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Addendum 2: REIT Performance Metrics -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">A.02</div>
+            <h2 class="text-4xl font-normal">Public REIT Performance</h2>
+        </div>
+        <div class="text-sm text-gray-400">Comparable Analysis</div>
+    </div>
+
+    <p class="text-gray-600 mb-6">
+        Q1 2025 performance data from leading manufactured housing REITs demonstrates the sector's
+        resilience and institutional buyer appetite at exit.
+    </p>
+
+    <div class="flat-card overflow-hidden mb-6">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Sun Communities (SUI)</th>
+                    <th>Equity LifeStyle (ELS)</th>
+                    <th>UMH Properties</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="font-normal">Market Cap</td>
+                    <td>$15.6B</td>
+                    <td>$12.4B</td>
+                    <td>$0.5B</td>
+                </tr>
+                <tr>
+                    <td class="font-normal">MHP Portfolio</td>
+                    <td>285 parks / 97,320 lots</td>
+                    <td>206 parks / 75,300 lots</td>
+                    <td>141 parks / 26,500 lots</td>
+                </tr>
+                <tr>
+                    <td class="font-normal">NOI Growth (YoY)</td>
+                    <td class="text-[#D1AF61]">+6.4%</td>
+                    <td class="text-[#D1AF61]">+5.9%</td>
+                    <td class="text-[#D1AF61]">+8.4%</td>
+                </tr>
+                <tr>
+                    <td class="font-normal">Occupancy Rate</td>
+                    <td>97.3%</td>
+                    <td>94.0%</td>
+                    <td>87.9%</td>
+                </tr>
+                <tr>
+                    <td class="font-normal">Avg Lot Rent</td>
+                    <td>$724/month (+5.2% YoY)</td>
+                    <td>$895/month (+5.7% YoY)</td>
+                    <td>$554/month (+11% YoY)</td>
+                </tr>
+                <tr>
+                    <td class="font-normal">Implied Cap Rate</td>
+                    <td>~5.1%</td>
+                    <td>~5.3%</td>
+                    <td>~6.5%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6">
+        <div class="flat-card-dark p-5">
+            <div class="text-xs text-white/40 uppercase mb-2">Sun Communities Strategy</div>
+            <p class="text-sm text-white/80">
+                Deleveraging focus; sold 3 MHPs in Q1 2025 for $27.8M. Strategic pivot toward marinas
+                while maintaining core MHP cash flows.
+            </p>
+        </div>
+        <div class="flat-card p-5 accent-border-left">
+            <div class="text-xs text-gray-400 uppercase mb-2">ELS Strategy</div>
+            <p class="text-sm text-gray-600">
+                Expanded by 736 sites organically. Focus on Sunbelt markets with site expansions
+                driving portfolio growth.
+            </p>
+        </div>
+        <div class="flat-card p-5">
+            <div class="text-xs text-gray-400 uppercase mb-2">UMH Strategy</div>
+            <p class="text-sm text-gray-600">
+                Aggressive acquisition pace; added 6 parks YoY. Unique rental home integration
+                strategy driving occupancy gains.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Addendum 3: Regional Market Analysis -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">A.03</div>
+            <h2 class="text-4xl font-normal">Regional Market Analysis</h2>
+        </div>
+        <div class="text-sm text-gray-400">Midwest Focus</div>
+    </div>
+
+    <p class="text-gray-600 mb-6 max-w-4xl leading-relaxed flex-shrink-0">
+        The Midwest presents compelling entry opportunities with wider cap rates and strengthening
+        fundamentals. Michigan specifically has re-emerged as a top 5 transaction market.
+    </p>
+
+    <div class="grid grid-cols-12 gap-8 flex-1 min-h-0 items-stretch">
+        <div class="col-span-5 flex flex-col gap-4 min-h-0">
+            <div class="flat-card p-5 accent-border-left flex-shrink-0">
+                <h4 class="font-normal text-[#06173B] mb-3">Midwest Market Characteristics</h4>
+                <ul class="text-sm text-gray-600 space-y-1.5">
+                    <li>• Strong manufacturing economies (Ohio, Indiana, Michigan)</li>
+                    <li>• Limited rent control vs. coastal markets</li>
+                    <li>• Cap rates 50–100 bps wider than Sunbelt</li>
+                    <li>• Institutional buyer penetration still low</li>
+                </ul>
+            </div>
+
+            <div class="flat-card-dark p-5 flex-1 min-h-0 flex flex-col">
+                <h4 class="font-serif text-lg mb-4 text-[#D1AF61] font-normal">Target Market Metrics</h4>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm mt-auto">
+                    <div>
+                        <div class="text-white/40 text-xs uppercase">Midwest Occupancy</div>
+                        <div class="text-white font-light">90% → Improving</div>
+                    </div>
+                    <div>
+                        <div class="text-white/40 text-xs uppercase">Avg Lot Rent</div>
+                        <div class="text-white font-light">$523/month</div>
+                    </div>
+                    <div>
+                        <div class="text-white/40 text-xs uppercase">Rent Growth (YoY)</div>
+                        <div class="text-[#D1AF61]">+6.7%</div>
+                    </div>
+                    <div>
+                        <div class="text-white/40 text-xs uppercase">Entry Cap Rate</div>
+                        <div class="text-white font-light">9–12%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-7 flex flex-col min-h-0">
+            <div class="regional-chart-panel flex-1">
+                <div class="px-5 py-4 border-b border-gray-100 bg-white flex-shrink-0">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider font-medium">Regional Cap Rate Comparison</div>
+                    <div class="text-sm text-gray-400 mt-1">2024–2025 · Implied cap rates by region (%)</div>
+                </div>
+                <div class="flex-1 flex flex-col min-h-0 px-4 pb-4 pt-3 bg-white">
+                    <div class="regional-chart-host mx-auto w-full max-w-full">
+                        <canvas id="regionalCapRateChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Addendum 4: Supply-Demand Dynamics -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">A.04</div>
+            <h2 class="text-4xl font-normal">Supply-Demand Dynamics</h2>
+        </div>
+        <div class="text-sm text-gray-400">Structural Tailwinds</div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8 flex-1">
+        <div class="space-y-6">
+            <div class="flat-card p-6">
+                <h4 class="font-serif text-xl text-[#06173B] mb-4 font-normal">Supply Constraints</h4>
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3">
+                        <div class="w-1.5 h-1.5 bg-[#D1AF61] rounded-full mt-2 flex-shrink-0"></div>
+                        <p class="text-sm text-gray-600">
+                            <strong>Zoning restrictions:</strong> New MHP development effectively blocked in most markets for decades
+                        </p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-1.5 h-1.5 bg-[#D1AF61] rounded-full mt-2 flex-shrink-0"></div>
+                        <p class="text-sm text-gray-600">
+                            <strong>Community opposition:</strong> NIMBYism prevents new community approvals
+                        </p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-1.5 h-1.5 bg-[#D1AF61] rounded-full mt-2 flex-shrink-0"></div>
+                        <p class="text-sm text-gray-600">
+                            <strong>Redevelopment pressure:</strong> Older communities worth more as apartments/mixed-use
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="text-xs text-gray-400 uppercase">Net New Supply</div>
+                    <div class="text-2xl font-serif text-[#06173B]">~0 pads/year</div>
+                </div>
+            </div>
+
+            <div class="flat-card p-6 accent-border-left">
+                <h4 class="font-serif text-xl text-[#06173B] mb-4 font-normal">Demand Drivers</h4>
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3">
+                        <div class="w-1.5 h-1.5 bg-[#06173B] rounded-full mt-2 flex-shrink-0"></div>
+                        <p class="text-sm text-gray-600">
+                            <strong>Housing affordability crisis:</strong> Manufactured homes average $124K vs. $514K site-built
+                        </p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-1.5 h-1.5 bg-[#06173B] rounded-full mt-2 flex-shrink-0"></div>
+                        <p class="text-sm text-gray-600">
+                            <strong>Demographic shifts:</strong> 22M Americans live in manufactured homes
+                        </p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-1.5 h-1.5 bg-[#06173B] rounded-full mt-2 flex-shrink-0"></div>
+                        <p class="text-sm text-gray-600">
+                            <strong>Interest rate sensitivity:</strong> Lower rates expected to drive transaction volume
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="chart-container chart-container--tall min-h-[260px]">
+                <canvas id="supplyDemandChart"></canvas>
+            </div>
+            <p class="text-xs text-gray-500 text-center">Manufactured Housing Completions vs. Demolitions (2000–2024)</p>
+
+            <div class="flat-card-dark p-6">
+                <h4 class="font-serif text-lg mb-4 text-[#D1AF61] font-normal">Key Statistics</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="text-3xl font-serif text-white">4.3M</div>
+                        <div class="text-xs text-white/60">Total MHC sites nationwide</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-serif text-[#D1AF61]">95%</div>
+                        <div class="text-xs text-white/60">National occupancy rate</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-serif text-white">$683</div>
+                        <div class="text-xs text-white/60">National avg monthly rent</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-serif text-[#D1AF61]">6–8%</div>
+                        <div class="text-xs text-white/60">Annual rent growth (2025)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Addendum 5: Competitive Landscape -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">A.05</div>
+            <h2 class="text-4xl font-normal">Competitive Landscape</h2>
+        </div>
+        <div class="text-sm text-gray-400">Market Positioning</div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6 flex-1">
+        <div class="flat-card p-6">
+            <div class="text-xs text-gray-400 uppercase mb-2">Segment 1</div>
+            <h4 class="font-serif text-xl text-[#06173B] mb-4 font-normal">Institutional REITs</h4>
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Target Size</span>
+                    <span class="font-normal">400+ pads</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Entry Cap Rate</span>
+                    <span class="font-normal">5.0–5.5%</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Geographic Focus</span>
+                    <span class="font-normal">Sunbelt / National</span>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <p class="text-xs text-gray-500">
+                    Cannot efficiently deploy capital below 100+ pads. Focus on stabilized, institutional-quality assets.
+                </p>
+            </div>
+        </div>
+
+        <div class="flat-card p-6 accent-border-left">
+            <div class="text-xs text-[#D1AF61] uppercase mb-2">Segment 2</div>
+            <h4 class="font-serif text-xl text-[#06173B] mb-4 font-normal">Vantum Strategy</h4>
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-[#06173B]/70">Target Size</span>
+                    <span class="font-normal text-[#06173B]">250–400 pads</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-[#06173B]/70">Entry Cap Rate</span>
+                    <span class="font-normal text-[#06173B]">9–12%</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-[#06173B]/70">Geographic Focus</span>
+                    <span class="font-normal text-[#06173B]">Midwest</span>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <p class="text-xs text-gray-500">
+                    Sweet spot: Large enough for institutional exit, small enough to avoid competition from REITs.
+                </p>
+            </div>
+        </div>
+
+        <div class="flat-card p-6">
+            <div class="text-xs text-gray-400 uppercase mb-2">Segment 3</div>
+            <h4 class="font-serif text-xl text-[#06173B] mb-4 font-normal">Mom-and-Pop</h4>
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Target Size</span>
+                    <span class="font-normal">25–75 pads</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Entry Cap Rate</span>
+                    <span class="font-normal">8–12%</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Geographic Focus</span>
+                    <span class="font-normal">Local / Regional</span>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <p class="text-xs text-gray-500">
+                    Limited operational sophistication. Aging ownership creating generational transfer opportunities.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6 flat-card-dark p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h4 class="font-serif text-lg text-[#D1AF61] mb-1 font-normal">Strategic Positioning</h4>
+                <p class="text-sm text-white/70 max-w-2xl">
+                    Vantum operates in the "aggregation gap"—too small for REITs, too sophisticated for mom-and-pop.
+                    This creates a protected niche with multiple exit channels.
+                </p>
+            </div>
+            <div class="text-right">
+                <div class="text-xs text-white/40 uppercase">Target Buyer Universe</div>
+                <div class="text-sm text-white mt-1">Public REITs • Institutional PE • Regional Operators</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Addendum 6: Risk Factors & Mitigation -->
+<div class="slide p-16 flex flex-col min-h-0">
+    <div class="flex items-baseline justify-between mb-8 border-b border-gray-200 pb-4 flex-shrink-0">
+        <div>
+            <div class="section-number mb-2">A.06</div>
+            <h2 class="text-4xl font-normal">Risk Factors &amp; Mitigation</h2>
+        </div>
+        <div class="text-sm text-gray-400">Due Diligence</div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8 flex-1">
+        <div class="space-y-4">
+            <div class="flat-card p-5">
+                <h4 class="font-normal text-[#06173B] mb-2">Market Risk</h4>
+                <p class="text-sm text-gray-600 mb-2">Interest rate volatility affects cap rates and exit pricing.</p>
+                <p class="text-xs text-[#D1AF61]"><strong>Mitigation:</strong> Lock in long-term fixed-rate agency debt; target 300+ bps spread to absorb rate movement.</p>
+            </div>
+
+            <div class="flat-card p-5">
+                <h4 class="font-normal text-[#06173B] mb-2">Operational Risk</h4>
+                <p class="text-sm text-gray-600 mb-2">Small parks require hands-on management; tenant issues can escalate.</p>
+                <p class="text-xs text-[#D1AF61]"><strong>Mitigation:</strong> Anchor + Satellite model centralizes operations; professional property management overlay.</p>
+            </div>
+
+            <div class="flat-card p-5">
+                <h4 class="font-normal text-[#06173B] mb-2">Regulatory Risk</h4>
+                <p class="text-sm text-gray-600 mb-2">Rent control legislation or zoning changes could impact operations.</p>
+                <p class="text-xs text-[#D1AF61]"><strong>Mitigation:</strong> Focus on Midwest markets with limited rent control; proactive resident relations.</p>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <div class="flat-card p-5">
+                <h4 class="font-normal text-[#06173B] mb-2">Concentration Risk</h4>
+                <p class="text-sm text-gray-600 mb-2">Geographic clustering creates single-market exposure.</p>
+                <p class="text-xs text-[#D1AF61]"><strong>Mitigation:</strong> Target 2–3 distinct Midwest markets; diversify across MSA sizes.</p>
+            </div>
+
+            <div class="flat-card p-5">
+                <h4 class="font-normal text-[#06173B] mb-2">Liquidity Risk</h4>
+                <p class="text-sm text-gray-600 mb-2">3–5 year hold period limits immediate liquidity.</p>
+                <p class="text-xs text-[#D1AF61]"><strong>Mitigation:</strong> Strong cash-on-cash yields provide income; multiple exit channels (REITs, PE, recap).</p>
+            </div>
+
+            <div class="flat-card-dark p-5">
+                <h4 class="font-serif text-lg text-[#D1AF61] mb-3 font-normal">Downside Protection</h4>
+                <ul class="text-sm text-white/80 space-y-2">
+                    <li>• High occupancy (95%+) provides cash flow stability</li>
+                    <li>• Affordable housing demand is recession-resistant</li>
+                    <li>• Hard asset backing with replacement cost above market value</li>
+                    <li>• Multiple value creation levers (NOI growth + cap rate compression)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Final Slide: Contact -->
+<div class="slide slide-dark flex flex-col justify-between p-16 relative">
+    <div class="absolute inset-0 opacity-10">
+        <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1200"
+             class="w-full h-full object-cover" alt="Midwest Landscape" />
+    </div>
+    <div class="absolute inset-0 bg-[#06173B]/90"></div>
+
+    <div class="relative z-10">
+        <div class="w-16 h-0.5 bg-[#D1AF61] mb-8"></div>
+        <h1 class="text-5xl font-serif font-normal mb-6">Vantum Capital</h1>
+        <p class="text-xl text-white/60 max-w-xl">
+            Institutional-quality manufactured housing investment strategy
+        </p>
+    </div>
+
+    <div class="relative z-10 grid grid-cols-2 gap-12">
+        <div>
+            <div class="text-sm text-white/40 uppercase tracking-wider mb-4">Contact</div>
+            <div class="space-y-2 text-white/80 font-light">
+                <p>info@vantumcapital.com</p>
+                <p>+1 (XXX) XXX-XXXX</p>
+            </div>
+        </div>
+        <div>
+            <div class="text-sm text-white/40 uppercase tracking-wider mb-4">Strategy Summary</div>
+            <div class="space-y-1 text-sm text-white/60">
+                <p>Target: 250–400 pad portfolios</p>
+                <p>Markets: Ohio, Indiana, Michigan</p>
+                <p>Returns: 300–450 bps compression + NOI growth</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative z-10 flex justify-between items-end text-xs text-white/30">
+        <span>Confidential — For Authorized Recipients Only</span>
+        <span>April 2026</span>
+    </div>
+</div>
+
+<script defer src="deck-scripts.js"></script>
+</body>
+</html>
