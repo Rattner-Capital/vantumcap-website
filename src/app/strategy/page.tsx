@@ -1,21 +1,29 @@
-import Link from "next/link";
-import SiteHeader from "@/components/SiteHeader";
+import { strategyCards } from "@/components/site/siteData";
 
 export default function StrategyPage() {
   return (
-    <main className="min-h-screen bg-vantum-ink px-6 pb-24 pt-4 text-slate-100 sm:px-10 sm:pt-6">
-      <SiteHeader />
-      <div className="mx-auto max-w-4xl">
-        <h1 className="font-serif text-5xl">Investment Strategy</h1>
-        <p className="mt-5 max-w-2xl text-lg text-slate-300">
-          This page is coming soon.
-        </p>
-        <Link
-          href="/"
-          className="mt-10 inline-block rounded-sm border border-vantum-gold/70 px-5 py-2 text-sm uppercase tracking-[0.12em] text-vantum-lightGold hover:bg-vantum-gold/15"
-        >
-          Back to Home
-        </Link>
+    <main className="bg-[#0b1220]">
+      <div className="mx-auto max-w-[1280px] px-6 py-20 sm:px-10">
+        <p className="text-xs uppercase tracking-[0.16em] text-[#d0ac72]">Investment Strategies</p>
+        <h1 className="mt-4 font-serif text-5xl text-white sm:text-6xl">Disciplined deployment across complex opportunity sets.</h1>
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
+          {strategyCards.map((strategy) => {
+            const anchorMap: Record<string, string> = {
+              "Special Situations": "special-situations",
+              "Distressed Credit": "distressed-credit",
+              "Real Estate Value Transformation": "real-estate",
+              "Event-Driven Opportunities": "event-driven",
+              "Advisory & Co-Investment": "advisory",
+            };
+            const id = anchorMap[strategy.title];
+            return (
+              <article id={id} key={strategy.title} className="border border-white/10 bg-[#101a2d] p-7">
+                <h2 className="font-serif text-3xl text-white">{strategy.title}</h2>
+                <p className="mt-4 text-slate-300">{strategy.body}</p>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </main>
   );

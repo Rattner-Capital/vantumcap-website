@@ -1,7 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { teamMembers } from "../teamData";
-import SiteHeader from "@/components/SiteHeader";
+import ScrollToTopOnMount from "@/components/site/ScrollToTopOnMount";
 
 type TeamDetailProps = {
   params: Promise<{
@@ -17,44 +18,58 @@ export default async function TeamDetailPage({ params }: TeamDetailProps) {
     notFound();
   }
 
+  const portraitBySlug: Record<string, string> = {
+    "samuel-r-rattner": "/team/samuel-r-rattner.png",
+    "stephen-m-levine": "/team/stephen-m-levine.png",
+  };
+
   return (
-    <main className="min-h-screen bg-[#F2ECE7] text-[#0a285a]">
-      <SiteHeader />
-      <section className="border-b border-[#06173B]/14 bg-[#06173B] pb-12 pt-4">
-        <div className="mx-auto w-full max-w-[1320px] px-2 sm:px-4">
-          <div className="grid lg:grid-cols-12">
-            <div className="px-6 py-10 text-white lg:col-span-5 lg:px-10 lg:py-12">
-            <p className="text-xs uppercase tracking-[0.16em] text-white/75">
-              Who We Are / Leadership
-            </p>
-            <h1 className="mt-4 whitespace-nowrap font-serif text-[46px] leading-[0.9] sm:text-[56px] lg:text-[64px]">
-              {member.name}
-            </h1>
-            <p className="mt-6 whitespace-nowrap text-lg leading-snug text-white/90 sm:text-[26px]">
-              {member.title}
-            </p>
-            <Link
-              href="/team"
-              className="mt-8 inline-block border-b border-white/40 pb-1 text-sm uppercase tracking-[0.14em] text-white/85 hover:border-white hover:text-white"
-            >
-              Back to Team
-            </Link>
+    <main className="min-h-screen bg-[#f7f9fb] text-[#102f4a]">
+      <ScrollToTopOnMount />
+      <section className="border-b border-[#dfe7eb] bg-white px-6 pb-16 pt-14 sm:px-10">
+        <div className="mx-auto max-w-[1320px]">
+          <Link
+            href="/team"
+            className="text-[12px] uppercase tracking-[0.12em] text-[#4a667d] hover:text-[#0a4f7d]"
+          >
+            About / Leadership &amp; Team / Profile
+          </Link>
+          <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-16">
+            <div>
+              <h1 className="font-serif text-[56px] leading-[0.96] text-[#112f49]">
+                {member.name}
+              </h1>
+              <p className="mt-5 text-[28px] leading-tight text-[#1f3d56]">
+                {member.title}
+              </p>
+              <Link
+                href="/#team"
+                className="mt-8 inline-block text-[12px] uppercase tracking-[0.14em] text-[#0f3858] hover:text-[#0a4f7d]"
+              >
+                Back to Team →
+              </Link>
             </div>
-            <div className="lg:col-span-7 lg:pl-20 lg:pr-0">
-              <div className="relative mt-6 flex h-[420px] w-full max-w-[760px] items-end justify-center overflow-hidden border border-white/20 bg-[linear-gradient(165deg,#e4edf9_0%,#b8cee9_42%,#7e9fc8_100%)] lg:mt-14 lg:translate-y-24">
-                <div className="mb-10 h-[138px] w-[138px] rounded-sm bg-[#d5b2a6]/95" />
+            <div>
+              <div className="relative aspect-[4/3.8] w-full overflow-hidden border border-[#dfe7eb] bg-[#e6ddd4]">
+                <Image
+                  src={portraitBySlug[member.slug]}
+                  alt={`${member.name} portrait`}
+                  fill
+                  className="object-cover object-[center_20%]"
+                  sizes="(max-width: 1024px) 100vw, 48vw"
+                />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#F2ECE7] px-6 pb-14 pt-16 sm:px-10 md:pb-20 md:pt-24">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="font-serif text-6xl leading-[0.95] text-[#06173B] sm:text-7xl">
-            About
-          </h2>
-          <div className="mt-9 space-y-7 text-lg leading-relaxed text-[#06173B]/78 sm:text-[22px]">
+      <section className="bg-[#f7f9fb] px-6 pb-20 pt-16 sm:px-10">
+        <div className="mx-auto max-w-[1040px]">
+          <p className="inline-block rounded-full border border-[#d7e1e9] bg-white px-4 py-1 text-[11px] text-[#0c2f4f]">
+            Biography
+          </p>
+          <div className="mt-8 space-y-7 text-[22px] leading-[1.65] text-[#284761]">
             {member.bio.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}

@@ -10,7 +10,7 @@ export const teamMembers: TeamMember[] = [
   {
     slug: "samuel-r-rattner",
     name: "Samuel R. Rattner",
-    title: "Chief Executive Officer and Managing Partner",
+    title: "Managing Partner & CEO",
     intro:
       "Chief Executive Officer and Managing Partner focused on complex opportunities.",
     bio: [

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import SiteHeader from "@/components/site/SiteHeader";
+import SiteFooter from "@/components/site/SiteFooter";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.vantumcap.com"),
@@ -38,7 +40,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="bg-[#070d17] text-slate-100">
+        <SiteHeader />
+        {children}
+        <SiteFooter />
+      </body>
     </html>
   );
 }

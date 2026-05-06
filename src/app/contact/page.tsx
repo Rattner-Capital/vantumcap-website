@@ -1,21 +1,19 @@
-import Link from "next/link";
-import SiteHeader from "@/components/SiteHeader";
-
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-vantum-ink px-6 pb-24 pt-4 text-slate-100 sm:px-10 sm:pt-6">
-      <SiteHeader />
-      <div className="mx-auto max-w-4xl">
-        <h1 className="font-serif text-5xl">Contact</h1>
-        <p className="mt-5 max-w-2xl text-lg text-slate-300">
-          This page is coming soon.
-        </p>
-        <Link
-          href="/"
-          className="mt-10 inline-block rounded-sm border border-vantum-gold/70 px-5 py-2 text-sm uppercase tracking-[0.12em] text-vantum-lightGold hover:bg-vantum-gold/15"
-        >
-          Back to Home
-        </Link>
+    <main className="bg-[#090f19]">
+      <div className="mx-auto max-w-[900px] px-6 py-20 sm:px-10">
+        <p className="text-xs uppercase tracking-[0.16em] text-[#d0ac72]">Contact</p>
+        <h1 className="mt-4 font-serif text-5xl text-white sm:text-6xl">Institutional Inquiries</h1>
+        <p className="mt-6 text-lg text-slate-300">For investor onboarding, strategic opportunities, and firm-level introductions, please contact:</p>
+        <div className="mt-8 border border-white/10 bg-[#101827] p-8">
+          <p className="text-xs uppercase tracking-[0.14em] text-[#d0ac72]">Investor Relations</p>
+          <a href="mailto:investorrelations@vantumcap.com" className="mt-3 block font-serif text-3xl text-white">
+            investorrelations@vantumcap.com
+          </a>
+          <p className="mt-6 text-sm leading-relaxed text-slate-300">
+            Please include your institution, investment focus, and preferred contact details. Vantum responds to relevant institutional inquiries on a rolling basis.
+          </p>
+        </div>
       </div>
     </main>
   );
