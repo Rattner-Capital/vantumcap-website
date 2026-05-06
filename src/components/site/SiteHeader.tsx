@@ -69,28 +69,40 @@ export default function SiteHeader() {
         <div className="border-t border-[#e8edf2] bg-white px-6 py-4 lg:hidden">
           {navigation.map((item) => (
             <div key={item.label} className="mb-3">
-              <button
-                type="button"
-                className="flex w-full items-center justify-between py-2 text-left text-xs text-[#0b2d4a]"
-                onClick={() => setExpanded(expanded === item.label ? null : item.label)}
-              >
-                <span>{item.label}</span>
-                <span>{expanded === item.label ? "-" : "+"}</span>
-              </button>
-              {item.children && expanded === item.label ? (
-                <div className="border-l border-[#d7e0e8] pl-4">
-                  {item.children.map((child) => (
-                    <Link
-                      key={child.label}
-                      href={child.href}
-                      className="block py-1.5 text-[11px] text-[#0b2d4a]"
-                      onClick={() => setOpenMobile(false)}
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
-                </div>
-              ) : null}
+              {item.children ? (
+                <>
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between py-2 text-left text-xs text-[#0b2d4a]"
+                    onClick={() => setExpanded(expanded === item.label ? null : item.label)}
+                  >
+                    <span>{item.label}</span>
+                    <span>{expanded === item.label ? "-" : "+"}</span>
+                  </button>
+                  {expanded === item.label ? (
+                    <div className="border-l border-[#d7e0e8] pl-4">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.label}
+                          href={child.href}
+                          className="block py-1.5 text-[11px] text-[#0b2d4a]"
+                          onClick={() => setOpenMobile(false)}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <Link
+                  href={item.href}
+                  className="block py-2 text-xs text-[#0b2d4a]"
+                  onClick={() => setOpenMobile(false)}
+                >
+                  {item.label}
+                </Link>
+              )}
             </div>
           ))}
         </div>
