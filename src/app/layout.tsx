@@ -16,9 +16,9 @@ export const metadata: Metadata = {
     siteName: "Vantum Capital",
     images: [
       {
-        url: "/og-image-v2.png",
-        width: 1024,
-        height: 682,
+        url: "/og-image-1200x630.png",
+        width: 1200,
+        height: 630,
       },
     ],
     locale: "en_US",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "Vantum Capital",
     description:
       "Vantum Capital is an investment firm focused on complex, special situations and dislocated opportunities.",
-    images: ["/og-image-v2.png"],
+    images: ["/og-image-1200x630.png"],
   },
 };
 

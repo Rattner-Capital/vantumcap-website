@@ -11,16 +11,6 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#dbe3ea] bg-white">
-      <div className="w-full border-b border-[#e8edf2] bg-white">
-        <div className="mx-auto flex w-full items-center justify-between px-5 py-2 text-[12px] tracking-[0.02em] text-[#0c2f4f] sm:px-6 lg:px-7">
-          <div />
-          <div className="hidden items-center text-[14px] sm:flex">
-            <a href="mailto:investorrelations@vantumcap.com" className="hover:text-[#0a4f7d]">
-              investorrelations@vantumcap.com
-            </a>
-          </div>
-        </div>
-      </div>
       <div className="w-full bg-white">
         <div className="mx-auto flex w-full items-center justify-between px-5 py-6 sm:px-6 lg:px-7">
           <Link href="/" className="relative block h-[46px] w-[300px]">
@@ -60,7 +50,7 @@ export default function SiteHeader() {
               Get in Touch
             </Link>
           </div>
-          <button type="button" aria-label="Toggle menu" className="rounded border border-[#0b2d4a]/40 px-3 py-2 text-xs text-[#0b2d4a] lg:hidden" onClick={() => setOpenMobile((prev) => !prev)}>
+          <button type="button" aria-label="Toggle menu" className="p-1 text-[#0b2d4a] lg:hidden" onClick={() => setOpenMobile((prev) => !prev)}>
             <span className="block h-0.5 w-5 bg-current" />
             <span className="mt-1 block h-0.5 w-5 bg-current" />
             <span className="mt-1 block h-0.5 w-5 bg-current" />
