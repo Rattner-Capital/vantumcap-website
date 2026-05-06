@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 export default function SiteFooter() {
   return (
@@ -20,7 +19,7 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="grid gap-12 border-b border-white/15 pb-12 lg:grid-cols-[1.2fr_1fr_1fr]">
+        <div className="grid gap-12 border-b border-white/15 pb-12 lg:grid-cols-[1.2fr_1fr]">
           <div>
             <div className="relative h-[63px] w-[262px] max-w-full">
               <Image
@@ -38,15 +37,6 @@ export default function SiteFooter() {
           <div>
             <p className="text-[10px] uppercase tracking-[0.16em] text-[#b8d6ea]">Contact</p>
             <p className="mt-4 text-sm text-[#d8e7f2]">investorrelations@vantumcap.com</p>
-          </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.16em] text-[#b8d6ea]">Navigation</p>
-            <div className="mt-4 flex flex-col gap-2 text-sm text-[#d8e7f2]">
-              <Link href="/about">About</Link>
-              <Link href="/strategy">Investment Strategies</Link>
-              <Link href="/investors">Investors</Link>
-              <Link href="/insights">Insights</Link>
-            </div>
           </div>
         </div>
         <div className="pt-6 text-[11px] leading-relaxed text-[#b8d6ea]">
