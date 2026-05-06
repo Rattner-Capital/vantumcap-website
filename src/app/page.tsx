@@ -5,6 +5,14 @@ import { strategyCards } from "@/components/site/siteData";
 
 export default function Home() {
   const firstThreeStrategies = strategyCards.slice(0, 3);
+  const strategyDescriptors: Record<string, string> = {
+    "Special Situations":
+      "Control Investments, Strategic Transitions, Event-Driven Opportunities",
+    "Distressed Credit":
+      "Stressed Capital Structures, Rescue Financing, Opportunistic Credit",
+    "Value Transformation":
+      "Asset Repositioning, Operational Turnarounds, Capital Optimization",
+  };
 
   return (
     <main id="top" className="bg-white">
@@ -73,7 +81,9 @@ export default function Home() {
                   </svg>
                 </div>
                 <h4 className="font-sans text-[24px] font-normal leading-[1.2] text-[#112f49]">{strategy.title}</h4>
-                <p className="mt-4 text-[16px] leading-[1.35] text-[#1e3d58]">Special Situations, Event-Driven, Operationally Complex Assets</p>
+                <p className="mt-4 text-[16px] leading-[1.35] text-[#1e3d58]">
+                  {strategyDescriptors[strategy.title]}
+                </p>
                 <p className="mt-10 text-[16px] italic leading-[1.65] text-[#345168]">{strategy.body}</p>
                 <div className="mt-auto border-t border-[#dfe7eb] pt-7" />
               </article>
