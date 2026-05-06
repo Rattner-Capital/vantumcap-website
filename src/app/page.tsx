@@ -34,6 +34,12 @@ export default function Home() {
                 "Active Management.",
                 "Event-Driven Opportunities.",
               ]}
+              mobilePhrases={[
+                "Special Situations.",
+                "Disciplined Investing.",
+                "Active Management.",
+                "Event-Driven Opportunities.",
+              ]}
             />
           </h2>
           <p className="mt-6 max-w-[660px] text-[14px] leading-[1.55] text-[#dceaf6] sm:mt-10 sm:text-[27px] sm:leading-[1.55]">

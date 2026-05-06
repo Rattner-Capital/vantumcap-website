@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 type TypewriterTextProps = {
   text?: string;
   phrases?: string[];
+  mobilePhrases?: string[];
   typeSpeedMs?: number;
   deleteSpeedMs?: number;
   holdMs?: number;
@@ -15,14 +16,32 @@ type Phase = "typing" | "holding" | "deleting";
 export default function TypewriterText({
   text,
   phrases,
+  mobilePhrases,
   typeSpeedMs = 56,
   deleteSpeedMs = 38,
   holdMs = 2250,
 }: TypewriterTextProps) {
-  const phraseList = useMemo(
-    () => (phrases && phrases.length > 0 ? phrases : text ? [text] : [""]),
-    [phrases, text],
-  );
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const apply = () => setIsMobile(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  const phraseList = useMemo(() => {
+    const activePhrases =
+      isMobile && mobilePhrases && mobilePhrases.length > 0
+        ? mobilePhrases
+        : phrases;
+    return activePhrases && activePhrases.length > 0
+      ? activePhrases
+      : text
+        ? [text]
+        : [""];
+  }, [isMobile, mobilePhrases, phrases, text]);
 
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);

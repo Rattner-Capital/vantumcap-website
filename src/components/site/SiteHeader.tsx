@@ -61,7 +61,9 @@ export default function SiteHeader() {
             </Link>
           </div>
           <button type="button" aria-label="Toggle menu" className="rounded border border-[#0b2d4a]/40 px-3 py-2 text-xs text-[#0b2d4a] lg:hidden" onClick={() => setOpenMobile((prev) => !prev)}>
-            Menu
+            <span className="block h-0.5 w-5 bg-current" />
+            <span className="mt-1 block h-0.5 w-5 bg-current" />
+            <span className="mt-1 block h-0.5 w-5 bg-current" />
           </button>
         </div>
       </div>
