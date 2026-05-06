@@ -16,17 +16,17 @@ export default function Home() {
 
   return (
     <main id="top" className="bg-white">
-      <section className="relative min-h-[74vh] overflow-hidden border-b border-[#d9e2ea] sm:min-h-[84vh]">
+      <section className="relative min-h-[62vh] overflow-hidden border-b border-[#d9e2ea] sm:min-h-[84vh]">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('/hero-clean.jpg')" }}
         />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,33,56,0.52),rgba(4,29,49,0.78))]" />
-        <div className="relative w-full px-8 pb-28 pt-24 sm:px-12 sm:pb-36 sm:pt-32 lg:pl-[90px] lg:pr-8 lg:pt-[170px]">
-          <h1 className="max-w-[760px] font-serif text-[44px] leading-[1] text-white sm:text-[66px]">
+        <div className="relative w-full px-8 pb-16 pt-16 sm:px-12 sm:pb-36 sm:pt-32 lg:pl-[90px] lg:pr-8 lg:pt-[170px]">
+          <h1 className="max-w-[760px] font-serif text-[36px] leading-[0.96] text-white sm:text-[66px]">
             Vantum Capital
           </h1>
-          <h2 className="mt-4 max-w-[760px] text-[28px] leading-[1.08] text-[#edf4fa] sm:text-[39px] sm:leading-[1.04]">
+          <h2 className="mt-3 max-w-[760px] text-[22px] leading-[1.06] text-[#edf4fa] sm:mt-4 sm:text-[39px] sm:leading-[1.04]">
             <TypewriterText
               phrases={[
                 "Special Situations and Opportunistic Capital.",
@@ -36,11 +36,11 @@ export default function Home() {
               ]}
             />
           </h2>
-          <p className="mt-8 max-w-[660px] text-[16px] leading-[1.6] text-[#dceaf6] sm:mt-10 sm:text-[27px] sm:leading-[1.55]">
+          <p className="mt-6 max-w-[660px] text-[14px] leading-[1.55] text-[#dceaf6] sm:mt-10 sm:text-[27px] sm:leading-[1.55]">
             Investing across special situations, distressed credit, and operationally complex assets through a fundamentally driven, risk-aware approach.
           </p>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <Link href="/#about" className="border border-white/35 px-8 py-3.5 text-[13px] text-white hover:bg-white/10">
+          <div className="mt-7 flex flex-wrap gap-3 sm:mt-10">
+            <Link href="/#about" className="border border-white/35 px-7 py-3 text-[12px] text-white hover:bg-white/10 sm:px-8 sm:py-3.5 sm:text-[13px]">
               About Vantum
             </Link>
           </div>
