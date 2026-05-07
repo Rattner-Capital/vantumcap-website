@@ -105,7 +105,7 @@ export default function Home() {
           </span>
           <div className="mt-8 grid grid-cols-1 gap-14 lg:grid-cols-[560px_640px] lg:gap-[165px]">
             <h3 className="max-w-[560px] font-serif text-[52px] leading-[1.03] text-[#102f4a]">
-              Leadership &amp; Team
+              Leadership Team
             </h3>
             <p className="max-w-[640px] text-[20px] leading-[1.5] text-[#1f3d56]">
               Vantum Capital is led by principals with deep investing, credit markets, operating, and capital structure experience across complex and dislocated situations.
